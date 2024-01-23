@@ -39,29 +39,10 @@ const UserName = () => {
   );
 };
 
-const SearchBar = () => {
-  return (
-    <div>
-      <div class="search-bar">
-        <div class="search-bar-icon"></div>
-      </div>
-    </div>
-  );
-};
-
-const Options = () => {
-  return (
-    <div>
-      <div class="options-list"></div>
-    </div>
-  );
-};
-
 export const RightSideMenu = () => {
   return (
     <Container>
       <UserName />
-      <SearchBar />
     </Container>
   );
 };
@@ -69,4 +50,11 @@ export const RightSideMenu = () => {
 const Container = styled.div`
   background: ${theme.section.background};
   padding: 20px;
+
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
