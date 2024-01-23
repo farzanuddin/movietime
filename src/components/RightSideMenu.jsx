@@ -1,6 +1,6 @@
 import { createElement, useState } from "react";
 import styled from "styled-components";
-import { theme } from "../styles/utils/theme";
+import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
 import {
