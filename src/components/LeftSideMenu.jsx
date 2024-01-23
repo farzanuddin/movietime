@@ -1,5 +1,6 @@
 import { createElement, useState } from "react";
 import styled from "styled-components";
+
 import { theme } from "../styles/utils/theme";
 
 import {
@@ -92,6 +93,12 @@ const Container = styled.aside`
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 const ListContainer = styled.div``;
 const ListTitle = styled.p`

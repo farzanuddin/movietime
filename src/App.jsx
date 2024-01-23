@@ -9,19 +9,14 @@ import { theme } from "./styles/utils/theme";
 import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
 import { Content } from "./components/Content";
+import { Header } from "./components/Header";
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <AppContainer menuOpen={menuOpen}>
-        <LeftSideMenu menuOpen={menuOpen} />
+      <AppContainer>
+        <LeftSideMenu />
         <Content />
         <RightSideMenu />
       </AppContainer>
@@ -32,8 +27,16 @@ function App() {
 const AppContainer = styled.div`
   height: 100vh;
   width: 100vw;
-  display: grid;
-  grid-template-columns: 15% 60% 25%;
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 15% 60% 25%;
+  }
+
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export default App;

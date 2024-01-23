@@ -1,8 +1,3 @@
-export const device = {
-  tablet: "(min-width: 768px)",
-  laptop: "(min-width: 1024px)",
-};
-
 export const theme = {
   background: "#1D1D29",
   section: {

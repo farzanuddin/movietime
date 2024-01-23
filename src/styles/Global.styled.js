@@ -1,5 +1,4 @@
 import * as styled from "styled-components";
-import { device } from "./utils/theme";
 
 export const GlobalStyles = styled.createGlobalStyle`
   html {
@@ -17,18 +16,12 @@ export const GlobalStyles = styled.createGlobalStyle`
   }
 
   body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 1.6rem;
     min-height: 100vh;
     padding: 0 0;
     background-color: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text.primary};
-
-    @media ${device.tablet} {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
 
   a,
