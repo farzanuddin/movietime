@@ -1,8 +1,7 @@
-# React + Vite
+## Technologies Utilized
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Vite**: A high-speed development environment tailored for contemporary web projects.
+- **Styled Components**: A CSS-in-JS library employed for styling React components.
+- **PropTypes**: Facilitates runtime type checking to ensure the integrity of React props.
+- **ESLint**: A versatile linting utility ensuring the consistency and cleanliness of JavaScript and
+  JSX code.
