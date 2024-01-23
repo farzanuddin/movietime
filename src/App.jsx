@@ -11,20 +11,24 @@ import { Header } from "./components/Header";
 
 function App() {
   const [leftMenuOpen, setLeftMenuOpen] = useState(false);
+  const [rightMenuOpen, setRightMenuOpen] = useState(false);
 
   const handleLeftMenu = () => {
-    console.log("CLICKED");
     setLeftMenuOpen(!leftMenuOpen);
+  };
+
+  const handleRightMenu = () => {
+    setRightMenuOpen(!rightMenuOpen);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
-        <Header setLeftMenuOpen={handleLeftMenu} />
+        <Header setLeftMenuOpen={handleLeftMenu} setRightMenuOpen={handleRightMenu} />
         <LeftSideMenu leftMenuOpen={leftMenuOpen} setLeftMenuOpen={handleLeftMenu} />
         <Content />
-        <RightSideMenu />
+        <RightSideMenu rightMenuOpen={rightMenuOpen} setRightMenuOpen={handleRightMenu} />
       </AppContainer>
     </ThemeProvider>
   );

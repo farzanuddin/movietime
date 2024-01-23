@@ -12,10 +12,15 @@ const UserNameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px;
 `;
 const Cont = styled.div`
   display: flex;
   align-items: center;
+
+  & > span:first-child {
+    margin-right: 10px;
+  }
 `;
 const Logo = styled.div`
   height: 40px;
@@ -39,22 +44,27 @@ const UserName = () => {
   );
 };
 
-export const RightSideMenu = () => {
+export const RightSideMenu = ({ rightMenuOpen, setRightMenuOpen }) => {
   return (
-    <Container>
+    <Container rightMenuOpen={rightMenuOpen}>
       <UserName />
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.aside`
+  position: absolute;
+  height: 100%;
+  width: 100%;
   background: ${theme.section.background};
-  padding: 20px;
-
-  display: none;
+  right: ${(props) => (props.rightMenuOpen ? "0" : "-100%")};
+  transition: right 0.3s ease-in-out;
 
   @media (min-width: 1024px) {
     display: flex;
     flex-direction: column;
+    position: relative;
+    right: 0;
+    transition: none;
   }
 `;

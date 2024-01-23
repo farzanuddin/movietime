@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { MenuOutlined as MenuIcon } from "@ant-design/icons";
 
-export const Header = ({ setLeftMenuOpen }) => {
+export const Header = ({ setLeftMenuOpen, setRightMenuOpen }) => {
   return (
     <Container>
       <MenuIcon onClick={() => setLeftMenuOpen()} />
-      <UserLogo />
+      <UserLogo onClick={() => setRightMenuOpen()} />
     </Container>
   );
 };
