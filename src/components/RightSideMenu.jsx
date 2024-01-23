@@ -4,8 +4,8 @@ import { theme } from "../styles/utils/theme";
 
 import {
   DownOutlined as DownArrow,
-  BellOutlined as Bell,
-  EnvironmentOutlined as Environment,
+  BellOutlined as BellIcon,
+  EnvironmentOutlined as EnvironmentIcon,
 } from "@ant-design/icons";
 
 const UserNameContainer = styled.div`
@@ -32,8 +32,8 @@ const UserName = () => {
         <div>User Name {createElement(DownArrow)}</div>
       </Cont>
       <Cont>
-        <div>{createElement(Environment)}</div>
-        <div>{createElement(Bell)}</div>
+        <EnvironmentIcon />
+        <BellIcon />
       </Cont>
     </UserNameContainer>
   );

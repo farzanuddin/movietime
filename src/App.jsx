@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import { GlobalStyles } from "./styles/Global.styled";
 import { theme } from "./styles/utils/theme";
@@ -16,6 +13,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
+        <Header />
         <LeftSideMenu />
         <Content />
         <RightSideMenu />
