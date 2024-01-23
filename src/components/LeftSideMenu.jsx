@@ -12,6 +12,7 @@ import {
   PlayCircleOutlined as Live,
   SaveOutlined as Bookmarks,
   SettingOutlined as Settings,
+  CloseCircleOutlined as CloseIcon,
 } from "@ant-design/icons";
 
 const listItems = {
@@ -67,7 +68,7 @@ const LeftSideMenuOptions = ({ activeTab, onTabClick }) => {
   ));
 };
 
-export const LeftSideMenu = ({ menuOpen }) => {
+export const LeftSideMenu = ({ leftMenuOpen, setLeftMenuOpen }) => {
   const [activeTab, setActiveTab] = useState("home");
 
   const handleTabClick = (tab) => {
@@ -75,9 +76,14 @@ export const LeftSideMenu = ({ menuOpen }) => {
   };
 
   return (
-    <Container>
+    <Container leftMenuOpen={leftMenuOpen}>
       <Logo primary="Mov" secondary=".time" />
       <LeftSideMenuOptions activeTab={activeTab} onTabClick={handleTabClick} />
+      {leftMenuOpen && (
+        <CloseIconContainer>
+          <CloseIcon onClick={() => setLeftMenuOpen()} />
+        </CloseIconContainer>
+      )}
     </Container>
   );
 };
@@ -85,19 +91,28 @@ export const LeftSideMenu = ({ menuOpen }) => {
 const LogoContainer = styled.p`
   display: flex;
   padding: 20px;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 const LogoSpan = styled.span`
   color: ${theme.text.active};
 `;
 const Container = styled.aside`
+  position: absolute;
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
-  display: none;
+  left: ${(props) => (props.leftMenuOpen ? "0" : "-100%")};
+  transition: left 0.3s ease-in-out;
 
   @media (min-width: 1024px) {
     display: flex;
     flex-direction: column;
+    position: relative;
+    left: 0;
+    transition: none;
   }
 `;
 const ListContainer = styled.div``;
@@ -112,13 +127,21 @@ const ListItem = styled.li`
   text-transform: capitalize;
   padding: 20px;
   cursor: pointer;
+
   & svg {
     margin-right: 20px;
   }
-  &:hover {
-    background: ${theme.section.active};
-  }
 
   ${(props) => props.isActive && `color: ${theme.text.active};`}
+  ${(props) => props.isActive && `background: ${theme.section.active};`}
   ${(props) => props.isActive && `border-left: 3px solid ${theme.text.active};`}
+`;
+const CloseIconContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
 `;

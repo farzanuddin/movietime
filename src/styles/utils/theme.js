@@ -3,6 +3,7 @@ export const theme = {
   section: {
     background: "#222432",
     active: "#2D2F3D",
+    hover: "#24252e",
   },
   text: {
     primary: "#DCDBDE",

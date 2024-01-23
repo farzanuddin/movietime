@@ -1,5 +1,15 @@
 import styled from "styled-components";
 import { MenuOutlined as MenuIcon } from "@ant-design/icons";
+
+export const Header = ({ setLeftMenuOpen }) => {
+  return (
+    <Container>
+      <MenuIcon onClick={() => setLeftMenuOpen()} />
+      <UserLogo />
+    </Container>
+  );
+};
+
 const Container = styled.div`
   display: none;
 
@@ -18,11 +28,3 @@ const UserLogo = styled.div`
   border-radius: 50%;
   background: red;
 `;
-export const Header = () => {
-  return (
-    <Container>
-      <MenuIcon />
-      <UserLogo />
-    </Container>
-  );
-};

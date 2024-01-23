@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 
 import { GlobalStyles } from "./styles/Global.styled";
@@ -9,12 +10,19 @@ import { Content } from "./components/Content";
 import { Header } from "./components/Header";
 
 function App() {
+  const [leftMenuOpen, setLeftMenuOpen] = useState(false);
+
+  const handleLeftMenu = () => {
+    console.log("CLICKED");
+    setLeftMenuOpen(!leftMenuOpen);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
-        <Header />
-        <LeftSideMenu />
+        <Header setLeftMenuOpen={handleLeftMenu} />
+        <LeftSideMenu leftMenuOpen={leftMenuOpen} setLeftMenuOpen={handleLeftMenu} />
         <Content />
         <RightSideMenu />
       </AppContainer>
