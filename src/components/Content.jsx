@@ -1,11 +1,10 @@
-import { createElement, useState } from "react";
 import styled from "styled-components";
-import { theme } from "../styles/utils/theme";
+import { Header } from "./Header";
 
 export const Content = () => {
   return (
     <Container>
-      <p>Hello</p>
+      <Header />
     </Container>
   );
 };

@@ -1,8 +1,6 @@
 import { createElement, useState } from "react";
 import styled from "styled-components";
-
 import { theme } from "../styles/utils/theme";
-
 import {
   HomeOutlined as Home,
   BookOutlined as Favorite,
@@ -68,7 +66,7 @@ const LeftSideMenuOptions = ({ activeTab, onTabClick }) => {
   ));
 };
 
-export const LeftSideMenu = ({ leftMenuOpen, setLeftMenuOpen }) => {
+export const LeftSideMenu = () => {
   const [activeTab, setActiveTab] = useState("home");
 
   const handleTabClick = (tab) => {
@@ -76,14 +74,9 @@ export const LeftSideMenu = ({ leftMenuOpen, setLeftMenuOpen }) => {
   };
 
   return (
-    <Container leftMenuOpen={leftMenuOpen}>
+    <Container>
       <Logo primary="Mov" secondary=".time" />
       <LeftSideMenuOptions activeTab={activeTab} onTabClick={handleTabClick} />
-      {leftMenuOpen && (
-        <CloseIconContainer>
-          <CloseIcon onClick={() => setLeftMenuOpen()} />
-        </CloseIconContainer>
-      )}
     </Container>
   );
 };
@@ -100,19 +93,12 @@ const LogoSpan = styled.span`
   color: ${theme.text.active};
 `;
 const Container = styled.aside`
-  position: absolute;
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
-  left: ${(props) => (props.leftMenuOpen ? "0" : "-100%")};
-  transition: left 0.3s ease-in-out;
 
-  @media (min-width: 1024px) {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    left: 0;
-    transition: none;
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;
 const ListContainer = styled.div``;
@@ -135,13 +121,4 @@ const ListItem = styled.li`
   ${(props) => props.isActive && `color: ${theme.text.active};`}
   ${(props) => props.isActive && `background: ${theme.section.active};`}
   ${(props) => props.isActive && `border-left: 3px solid ${theme.text.active};`}
-`;
-const CloseIconContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
 `;

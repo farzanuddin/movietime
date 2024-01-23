@@ -1,6 +1,7 @@
 import { createElement, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../styles/utils/theme";
+import user from "../assets/images/user.webp";
 
 import {
   DownOutlined as DownArrow,
@@ -22,18 +23,17 @@ const Cont = styled.div`
     margin-right: 10px;
   }
 `;
-const Logo = styled.div`
+const UserImage = styled.img`
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  background: red;
   margin-right: 10px;
 `;
 const UserName = () => {
   return (
     <UserNameContainer>
       <Cont>
-        <Logo />
+        <UserImage src={user} />
         <div>User Name {createElement(DownArrow)}</div>
       </Cont>
       <Cont>
@@ -44,27 +44,20 @@ const UserName = () => {
   );
 };
 
-export const RightSideMenu = ({ rightMenuOpen, setRightMenuOpen }) => {
+export const RightSideMenu = () => {
   return (
-    <Container rightMenuOpen={rightMenuOpen}>
+    <Container>
       <UserName />
     </Container>
   );
 };
 
 const Container = styled.aside`
-  position: absolute;
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
-  right: ${(props) => (props.rightMenuOpen ? "0" : "-100%")};
-  transition: right 0.3s ease-in-out;
 
-  @media (min-width: 1024px) {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    right: 0;
-    transition: none;
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;
