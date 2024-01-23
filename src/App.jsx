@@ -7,7 +7,7 @@ import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
 import { Content } from "./components/Content";
 
-function App() {
+export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -18,7 +18,7 @@ function App() {
       </AppContainer>
     </ThemeProvider>
   );
-}
+};
 
 const AppContainer = styled.div`
   height: 100vh;
@@ -34,5 +34,3 @@ const AppContainer = styled.div`
     flex-direction: column;
   }
 `;
-
-export default App;
