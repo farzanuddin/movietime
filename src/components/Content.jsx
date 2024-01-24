@@ -124,7 +124,7 @@ const DiscoveredContainer = styled.div`
     display: none;s
   }
   border-radius: 10px;
-  margin-bottom: 30px;
+  margin: 30px 0;
 `;
 
 const ActiveFilterSection = ({ activeFilter }) => {
@@ -145,7 +145,7 @@ const ActiveFilterSection = ({ activeFilter }) => {
 
   return (
     <>
-      <h2>{FILTER_MAPPING[activeFilter]}</h2>
+      <h2>{FILTER_MAPPING[activeFilter]}:</h2>
       <ActiveFilterContainer>
         {activeFilterMovies?.results?.slice(0, 10).map((movie) => {
           const { title, backdrop_path, id, release_date } = movie;
@@ -179,7 +179,6 @@ const ActiveFilterContainer = styled.div`
     display: none;s
   }
   border-radius: 10px;
-  margin-bottom: 30px;
   margin-top: 20px;
 `;
 const ActiveFilterItem = styled.div`
@@ -227,7 +226,7 @@ export const Content = ({ activeFilter }) => {
   return (
     <Container>
       <Header />
-      <h2>Discovers</h2>
+      <h2>Discover Movies:</h2>
       <DiscoveredSection />
       <ActiveFilterSection activeFilter={activeFilter} />
     </Container>
