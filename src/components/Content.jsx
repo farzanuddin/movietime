@@ -10,10 +10,10 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   return (
     <DiscoveredItemContainer style={{ backgroundImage: `url(${backgroundImage})` }}>
       <InformationContainer>
-        <TextContainer>
+        <div>
           <p>{title}</p>
           <Genre>{genres?.map((genre) => genre.name).join(", ")}</Genre>
-        </TextContainer>
+        </div>
         <StarContainer>
           <StarFilled style={{ color: theme.misc.yellow }} />
           <Average>{average}</Average>
@@ -32,18 +32,6 @@ const DiscoveredItemContainer = styled.div`
   min-width: 500px;
   border-radius: 10px;
   position: relative;
-
-  ::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
-    z-index: -1;
-  }
 
   @media (max-width: 1024px) {
     height: 200px;
@@ -72,10 +60,6 @@ const Average = styled.p`
 const InformationContainer = styled.div`
   display: flex;
   align-self: flex-end;
-  z-index: 1;
-`;
-const TextContainer = styled.div`
-  z-index: 1;
 `;
 
 const DiscoveredSection = () => {
