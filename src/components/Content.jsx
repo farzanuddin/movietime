@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Header } from "./Header";
 import { StarFilled } from "@ant-design/icons";
-import { getMovieGenres, getMovies } from "../api";
+import { getMovies, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 
 const useFetchMovies = () => {
@@ -11,7 +11,7 @@ const useFetchMovies = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await getMovies("/discover/movie");
+        const response = await getMoviesWithGenres("/discover/movie");
         setDiscovered(response);
       } catch (error) {
         console.error("Error fetching movies:", error);
@@ -24,28 +24,13 @@ const useFetchMovies = () => {
   return discovered;
 };
 
-const DiscoverItem = ({ title, genreIds, average, backgroundImage }) => {
-  const [genreNames, setGenreNames] = useState([]);
-
-  useEffect(() => {
-    const fetchGenreNames = async () => {
-      try {
-        const names = await getMovieGenres(genreIds);
-        setGenreNames(names || []);
-      } catch (error) {
-        console.error("Error fetching genre names:", error);
-      }
-    };
-
-    fetchGenreNames();
-  }, [genreIds]);
-
+const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   return (
     <DiscoveredItemContainer style={{ backgroundImage: `url(${backgroundImage})` }}>
       <InformationContainer>
         <TextContainer>
           <Title>{title}</Title>
-          <Genre>{genreNames.join(", ")}</Genre>
+          <Genre>{genres.map((genre) => genre.name).join(", ")}</Genre>
         </TextContainer>
         <StarContainer>
           <StarFilled style={{ color: theme.misc.yellow }} />
@@ -59,7 +44,7 @@ const DiscoverItem = ({ title, genreIds, average, backgroundImage }) => {
 export const Content = () => {
   const discovered = useFetchMovies();
   const items = discovered.results && discovered.results.slice(0, 10);
-
+  
   return (
     <Container>
       <Header />
@@ -70,9 +55,9 @@ export const Content = () => {
             <DiscoverItem
               key={item.id}
               title={item.title}
-              genreIds={item.genre_ids}
               average={item.vote_average}
               backgroundImage={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+              genres={item.genres}
             />
           ))}
       </DiscoveredSection>

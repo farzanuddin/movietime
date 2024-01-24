@@ -27,9 +27,9 @@ const fetchData = async (endpoint) => {
   }
 };
 
-export const getMovies = async (endpoint, query = "") => {
+export const getMovies = async (endpoint) => {
   try {
-    const response = await fetchData(`${endpoint}?query=${query}`);
+    const response = await fetchData(`${endpoint}`);
     return response;
   } catch (error) {
     console.error(`Could not fetch any movies from ${endpoint}`, error);
@@ -37,22 +37,59 @@ export const getMovies = async (endpoint, query = "") => {
   }
 };
 
-export const getMovieGenres = async (genreIds) => {
-  const endpoint = "/genre/movie/list?language=en";
+const mapGenreIdsToNames = async (genreIds) => {
+  try {
+    const genreResponse = await axios.get(
+      "https://api.themoviedb.org/3/genre/movie/list?language=en",
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${AUTH_KEY}`,
+        },
+      }
+    );
 
+    const genreMap = new Map(genreResponse.data.genres.map((genre) => [genre.id, genre.name]));
+
+    const mappedGenres = genreIds.map((genreId) => {
+      return {
+        id: genreId,
+        name: genreMap.get(genreId),
+      };
+    });
+
+    return mappedGenres;
+  } catch (error) {
+    console.error("Error mapping genre IDs to names", error.message);
+    throw error;
+  }
+};
+
+export const getMoviesWithGenres = async (endpoint) => {
   try {
     const response = await fetchData(endpoint);
-    if (response) {
-      const genreMapping = {};
-      response.genres.forEach((genre) => {
-        genreMapping[genre.id] = genre.name;
-      });
 
-      const genreNames = genreIds.map((id) => genreMapping[id]);
-      return genreNames;
+    if (response && response.results) {
+      // Extract genre IDs from the movie data
+      const genreIds = response.results.flatMap((movie) => movie.genre_ids);
+
+      // Map genre IDs to names
+      const mappedGenres = await mapGenreIdsToNames(genreIds);
+
+      // Add the mapped genres back to the movie data
+      const moviesWithGenres = response.results.map((movie) => ({
+        ...movie,
+        genres: movie.genre_ids.map((genreId) =>
+          mappedGenres.find((genre) => genre.id === genreId)
+        ),
+      }));
+
+      return { ...response, results: moviesWithGenres };
     }
+
+    return null;
   } catch (error) {
-    console.error("Error fetching movie genres:", error);
+    console.error("Could not fetch movies with genres", error);
     return null;
   }
 };
