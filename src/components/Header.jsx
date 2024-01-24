@@ -1,6 +1,26 @@
 import styled from "styled-components";
 import user from "../assets/images/user.webp";
-import { Logo } from "./LeftSideMenu";
+import { theme } from "../styles/theme";
+
+const Logo = ({ primary, secondary }) => {
+  return (
+    <LogoContainer>
+      <LogoSpan>{primary}</LogoSpan>
+      <p>{secondary}</p>
+    </LogoContainer>
+  );
+};
+const LogoContainer = styled.div`
+  display: flex;
+  font-size: 2rem;
+
+  @media (min-width: 1024px) {
+    padding: 20px;
+  }
+`;
+const LogoSpan = styled.span`
+  color: ${theme.text.active};
+`;
 
 export const Header = () => {
   return (

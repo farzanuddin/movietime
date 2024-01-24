@@ -24,7 +24,7 @@ const iconMapping = {
   settings: Settings,
 };
 
-export const Logo = ({ primary, secondary }) => {
+const Logo = ({ primary, secondary }) => {
   return (
     <LogoContainer>
       <LogoSpan>{primary}</LogoSpan>
@@ -36,8 +36,8 @@ const LogoContainer = styled.div`
   display: flex;
   font-size: 2rem;
 
-  @media (min-width: 1024px) {
-    padding: 20px;
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;
 const LogoSpan = styled.span`
@@ -114,12 +114,9 @@ export const LeftSideMenu = () => {
     </Container>
   );
 };
+
 const Container = styled.aside`
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
 `;

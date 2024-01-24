@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
 import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
 import { Content } from "./components/Content";
@@ -10,17 +12,44 @@ import { theme } from "./styles/theme";
 
 const App = () => {
   const [activeFilter, setActiveFilter] = useState("now_playing");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  const handleDrawerOpen = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Header />
       <AppContainer>
-        <LeftSideMenu />
+        {!isMobile && <LeftSideMenu />}
         <Content activeFilter={activeFilter} />
         <RightSideMenu activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </AppContainer>
-      <Footer />
+      <Footer handleDrawerOpen={handleDrawerOpen} />
+      <Drawer
+        open={isDrawerOpen}
+        onClose={handleDrawerOpen}
+        direction="right"
+        lockBackgroundScroll="true"
+        size="90vw"
+      >
+        <LeftSideMenu />
+      </Drawer>
     </ThemeProvider>
   );
 };
