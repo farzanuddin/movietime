@@ -30,7 +30,7 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
       <InformationContainer>
         <TextContainer>
           <Title>{title}</Title>
-          <Genre>{genres.map((genre) => genre.name).join(", ")}</Genre>
+          <Genre>{genres?.map((genre) => genre.name).join(", ")}</Genre>
         </TextContainer>
         <StarContainer>
           <StarFilled style={{ color: theme.misc.yellow }} />
@@ -43,23 +43,22 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
 
 export const Content = () => {
   const discovered = useFetchMovies();
-  const items = discovered.results && discovered.results.slice(0, 10);
+  const items = discovered?.results?.slice(0, 10);
 
   return (
     <Container>
       <Header />
       <h2>Discovers</h2>
       <DiscoveredSection>
-        {items &&
-          items.map((item) => (
-            <DiscoverItem
-              key={item.id}
-              title={item.title}
-              average={item.vote_average}
-              backgroundImage={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
-              genres={item.genres}
-            />
-          ))}
+        {items?.map((item) => (
+          <DiscoverItem
+            key={item.id}
+            title={item.title}
+            average={item.vote_average}
+            backgroundImage={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+            genres={item.genres}
+          />
+        ))}
       </DiscoveredSection>
     </Container>
   );

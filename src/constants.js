@@ -7,3 +7,12 @@ export const LIST_ITEMS = {
   menu: ["home", "favorite", "purchase", "reminder"],
   other: ["playlist", "live", "bookmarks", "settings"],
 };
+
+export const FILTERS = {
+  "Now Playing": "/movie/now_playing",
+  Popular: "/movie/popular",
+  "Top Rated": "/movie/top_rated",
+  Upcoming: "/movie/upcoming",
+};
+
+export const LOGGED_IN_USER = "Torkia Mahloul"

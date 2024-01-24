@@ -50,9 +50,9 @@ const mapGenreIdsToNames = async (genreIds) => {
   try {
     const genreResponse = await getDataFromAPI("/genre/movie/list", "language=en");
 
-    const genreMap = new Map(genreResponse.genres.map((genre) => [genre.id, genre.name]));
+    const genreMap = new Map(genreResponse?.genres?.map((genre) => [genre.id, genre.name]));
 
-    const mappedGenres = genreIds.map((genreId) => ({
+    const mappedGenres = genreIds?.map((genreId) => ({
       id: genreId,
       name: genreMap.get(genreId),
     }));
@@ -74,9 +74,9 @@ export const getMoviesWithGenres = async (endpoint) => {
 
     const genreIds = response.results.flatMap((movie) => movie.genre_ids);
     const mappedGenres = await mapGenreIdsToNames(genreIds);
-    const moviesWithGenres = response.results.map((movie) => ({
+    const moviesWithGenres = response?.results?.map((movie) => ({
       ...movie,
-      genres: movie.genre_ids.map((genreId) => mappedGenres.find((genre) => genre.id === genreId)),
+      genres: movie?.genre_ids?.map((genreId) => mappedGenres.find((genre) => genre.id === genreId)),
     }));
 
     return { ...response, results: moviesWithGenres };

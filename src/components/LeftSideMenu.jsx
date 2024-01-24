@@ -49,7 +49,7 @@ const List = ({ category, items, activeTab, onTabClick }) => {
     <div key={category}>
       <ListTitle>{category.toUpperCase()}</ListTitle>
       <ul>
-        {items.map((item, index) => (
+        {items?.map((item, index) => (
           <ListItem key={index} onClick={() => onTabClick(item)} data-active={activeTab === item}>
             {createElement(iconMapping[item])}
             {item}
@@ -85,7 +85,7 @@ const ListItem = styled.li`
 `;
 
 const Options = ({ activeTab, onTabClick }) => {
-  return Object.entries(LIST_ITEMS).map(([category, items]) => (
+  return Object.entries(LIST_ITEMS)?.map(([category, items]) => (
     <List
       key={category}
       category={category}

@@ -10,31 +10,58 @@ import {
   SearchOutlined as SearchIcon,
   LoadingOutlined as Loader,
 } from "@ant-design/icons";
-
-const filters = {
-  "Now Playing": "/movie/now_playing",
-  Popular: "/movie/popular",
-  "Top Rated": "/movie/top_rated",
-  Upcoming: "/movie/upcoming",
-};
+import { FILTERS, LOGGED_IN_USER } from "../constants";
 
 const UserName = () => {
   return (
     <UserNameContainer>
-      <Cont>
-        <UserImage src={user} />
-        <div>Torkia Mahloul</div>
-      </Cont>
-      <Cont>
+      <UserNameSection>
+        <UserNameImage src={user} />
+        <div>{LOGGED_IN_USER}</div>
+      </UserNameSection>
+      <UserNameSection>
         <EnvironmentIcon />
         <BellContainer>
           <BellIcon />
           <NotificationDot />
         </BellContainer>
-      </Cont>
+      </UserNameSection>
     </UserNameContainer>
   );
 };
+const UserNameContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-top: 20px;
+`;
+const UserNameSection = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > span:first-child {
+    margin-right: 20px;
+  }
+`;
+const UserNameImage = styled.img`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+const BellContainer = styled.div`
+  position: relative;
+`;
+const NotificationDot = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-color: ${theme.misc.blue};
+  border-radius: 50%;
+`;
 
 const SearchBar = ({ searchResults, setSearchResults }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -112,7 +139,7 @@ const FilterButton = ({ filter, activeFilter, onFilterClick }) => {
 const FilterButtons = ({ activeFilter, onFilterClick }) => {
   return (
     <FilterContainer>
-      {Object.entries(filters).map(([filter, path]) => (
+      {Object.entries(FILTERS)?.map(([filter, path]) => (
         <FilterButton
           key={filter}
           filter={filter}
@@ -158,7 +185,7 @@ const PopularPinned = () => {
   }, []);
   return (
     <PopularContainer>
-      {popular?.results?.slice(0, 2).map((movie) => {
+      {popular?.results?.slice(0, 2)?.map((movie) => {
         return (
           <SearchResultsItem key={movie.id}>
             <SearchItemImage
@@ -243,7 +270,7 @@ const PopularActors = () => {
         const response = await getDataFromAPI("/person/popular");
         if (response && response.results) {
           const actorsWithDetails = await Promise.all(
-            response.results.slice(0, 3).map(async (actor) => {
+            response?.results?.slice(0, 3).map(async (actor) => {
               const actorDetails = await mapActorDetails(actor.id);
               return { ...actor, details: actorDetails };
             })
@@ -308,27 +335,6 @@ const Container = styled.aside`
     display: none;
   }
 `;
-const UserNameContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  margin-top: 20px;
-`;
-const Cont = styled.div`
-  display: flex;
-  align-items: center;
-
-  & > span:first-child {
-    margin-right: 20px;
-  }
-`;
-const UserImage = styled.img`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-`;
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
@@ -353,19 +359,6 @@ const SearchIconContainer = styled.div`
   cursor: pointer;
   color: ${theme.text.secondary};
 `;
-const BellContainer = styled.div`
-  position: relative;
-`;
-const NotificationDot = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 8px;
-  height: 8px;
-  background-color: ${theme.text.active};
-  border-radius: 50%;
-`;
-
 const SearchItemInformation = styled.div`
   flex-grow: 1;
   padding: 10px;

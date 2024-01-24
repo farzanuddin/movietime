@@ -15,5 +15,6 @@ export const theme = {
   },
   misc: {
     yellow: "#DBAD41",
+    blue: "#48A0F8"
   },
 };
