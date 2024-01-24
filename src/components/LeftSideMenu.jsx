@@ -11,11 +11,7 @@ import {
   SettingOutlined as Settings,
 } from "@ant-design/icons";
 import { theme } from "../styles/theme";
-
-const listItems = {
-  menu: ["home", "favorite", "purchase", "reminder"],
-  other: ["playlist", "live", "bookmarks", "settings"],
-};
+import { LIST_ITEMS } from "../constants";
 
 const iconMapping = {
   home: Home,
@@ -89,7 +85,7 @@ const ListItem = styled.li`
 `;
 
 const Options = ({ activeTab, onTabClick }) => {
-  return Object.entries(listItems).map(([category, items]) => (
+  return Object.entries(LIST_ITEMS).map(([category, items]) => (
     <List
       key={category}
       category={category}
