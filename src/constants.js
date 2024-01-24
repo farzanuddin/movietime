@@ -12,10 +12,10 @@ export const LIST_ITEMS = {
 export const FILTERS = ["now_playing", "popular", "top_rated", "upcoming"];
 
 export const FILTER_MAPPING = {
-  now_playing: "/movie/now_playing",
-  popular: "/movie/popular",
-  top_rated: "/movie/top_rated",
-  upcoming: "/movie/upcoming",
+  now_playing: "Now Playing",
+  popular: "Popular",
+  top_rated: "Top Rated",
+  upcoming: "Upcoming",
 };
 
 export const LOGGED_IN_USER = "Torkia Mahloul";

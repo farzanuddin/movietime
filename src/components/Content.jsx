@@ -4,7 +4,7 @@ import { StarFilled } from "@ant-design/icons";
 import { Header } from "./Header";
 import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
-import { IMAGE_URL_BASE } from "../constants";
+import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
 import dayjs from "dayjs";
 
 const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
@@ -145,7 +145,7 @@ const ActiveFilterSection = ({ activeFilter }) => {
 
   return (
     <>
-      <h2>{activeFilter}</h2>
+      <h2>{FILTER_MAPPING[activeFilter]}</h2>
       <ActiveFilterContainer>
         {activeFilterMovies?.results?.slice(0, 10).map((movie) => {
           const { title, backdrop_path, id, release_date } = movie;

@@ -10,7 +10,7 @@ import {
   SearchOutlined as SearchIcon,
   LoadingOutlined as Loader,
 } from "@ant-design/icons";
-import { FILTERS, IMAGE_URL_BASE, LOGGED_IN_USER } from "../constants";
+import { FILTERS, IMAGE_URL_BASE, LOGGED_IN_USER, FILTER_MAPPING } from "../constants";
 
 const UserName = () => {
   return (
@@ -196,7 +196,7 @@ const FilterButton = ({ filter, activeFilter, onFilterClick }) => {
 
   return (
     <FilterItem data-active={isActive} onClick={() => onFilterClick(filter)}>
-      {filter}
+      {FILTER_MAPPING[filter]}
     </FilterItem>
   );
 };
