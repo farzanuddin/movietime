@@ -44,7 +44,7 @@ const List = ({ category, items, activeTab, onTabClick }) => {
       <ListTitle>{category.toUpperCase()}</ListTitle>
       <ul>
         {items.map((item, index) => (
-          <ListItem key={index} onClick={() => onTabClick(item)} isActive={activeTab === item}>
+          <ListItem key={index} onClick={() => onTabClick(item)} data-active={activeTab === item}>
             {createElement(iconMapping[item])}
             {item}
           </ListItem>
