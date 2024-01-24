@@ -10,10 +10,10 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   return (
     <DiscoveredItemContainer style={{ backgroundImage: `url(${backgroundImage})` }}>
       <InformationContainer>
-        <div>
+        <TextContainer>
           <p>{title}</p>
           <Genre>{genres?.map((genre) => genre.name).join(", ")}</Genre>
-        </div>
+        </TextContainer>
         <StarContainer>
           <StarFilled style={{ color: theme.misc.yellow }} />
           <Average>{average}</Average>
@@ -33,6 +33,17 @@ const DiscoveredItemContainer = styled.div`
   border-radius: 10px;
   position: relative;
 
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+    z-index: 1;
+  }
+
   @media (max-width: 1024px) {
     height: 200px;
     min-width: 300px;
@@ -40,6 +51,7 @@ const DiscoveredItemContainer = styled.div`
   }
 `;
 const Genre = styled.p`
+  color: ${theme.text.secondary};
   @media (max-width: 1024px) {
     font-size: 1rem;
   }
@@ -47,19 +59,27 @@ const Genre = styled.p`
 const StarContainer = styled.div`
   display: flex;
   align-items: center;
-  background: white;
   border-radius: 5px;
   padding: 5px;
   width: auto;
-  f
+  background: ${theme.text.primary};
+  position: relative;
+  z-index: 2;
 `;
 const Average = styled.p`
   color: ${theme.misc.yellow};
   margin-left: 10px;
 `;
+const TextContainer = styled.div`
+  position: relative;
+  z-index: 2;
+`;
 const InformationContainer = styled.div`
   display: flex;
   align-self: flex-end;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
 `;
 
 const DiscoveredSection = () => {
