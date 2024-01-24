@@ -46,7 +46,6 @@ const LogoSpan = styled.span`
 `;
 
 const List = ({ category, items, activeTab, onTabClick }) => {
-  console.log(items);
   return (
     <div key={category}>
       <ListTitle>{category.toUpperCase()}</ListTitle>
@@ -63,12 +62,6 @@ const List = ({ category, items, activeTab, onTabClick }) => {
     </div>
   );
 };
-// List.propTypes = {
-//   category: PropTypes.string.isRequired,
-//   items: 
-//   activeTab:
-//   onTabClick:
-// }
 const ListTitle = styled.p`
   color: ${theme.text.secondary};
   padding: 20px;
