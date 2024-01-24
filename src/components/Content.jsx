@@ -2,16 +2,50 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Header } from "./Header";
 import { StarFilled } from "@ant-design/icons";
-import { getMovieGenres } from "../api";
+import { getMovieGenres, getMovies } from "../api";
 import { theme } from "../styles/theme";
 
-const DiscoverItem = ({ title, genres, average, backgroundImage }) => {
+const useFetchMovies = () => {
+  const [discovered, setDiscovered] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await getMovies("/discover/movie");
+        setDiscovered(response);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  return discovered;
+};
+
+const DiscoverItem = ({ title, genreIds, average, backgroundImage }) => {
+  const [genreNames, setGenreNames] = useState([]);
+
+  useEffect(() => {
+    const fetchGenreNames = async () => {
+      try {
+        const names = await getMovieGenres(genreIds);
+        setGenreNames(names || []);
+      } catch (error) {
+        console.error("Error fetching genre names:", error);
+      }
+    };
+
+    fetchGenreNames();
+  }, [genreIds]);
+
   return (
     <DiscoveredItemContainer style={{ backgroundImage: `url(${backgroundImage})` }}>
       <InformationContainer>
         <TextContainer>
           <Title>{title}</Title>
-          <Genre>{genres.join(", ")}</Genre>
+          <Genre>{genreNames.join(", ")}</Genre>
         </TextContainer>
         <StarContainer>
           <StarFilled style={{ color: theme.misc.yellow }} />
@@ -22,26 +56,9 @@ const DiscoverItem = ({ title, genres, average, backgroundImage }) => {
   );
 };
 
-export const Content = ({ discovered }) => {
-  const items = discovered && discovered.results.slice(0, 10);
-  const [genreNames, setGenreNames] = useState([]);
-
-  const fetchGenreNames = async (genreIds) => {
-    const genreNames = await getMovieGenres(genreIds);
-    return genreNames || [];
-  };
-
-  const fetchAllGenreNames = async () => {
-    if (items) {
-      const genrePromises = items.map((item) => fetchGenreNames(item.genre_ids));
-      const genreNamesArray = await Promise.all(genrePromises);
-      setGenreNames(genreNamesArray);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllGenreNames();
-  }, [items]);
+export const Content = () => {
+  const discovered = useFetchMovies();
+  const items = discovered.results && discovered.results.slice(0, 10);
 
   return (
     <Container>
@@ -49,11 +66,11 @@ export const Content = ({ discovered }) => {
       <h2>Discovers</h2>
       <DiscoveredSection>
         {items &&
-          items.map((item, index) => (
+          items.map((item) => (
             <DiscoverItem
               key={item.id}
               title={item.title}
-              genres={genreNames[index] || []}
+              genreIds={item.genre_ids}
               average={item.vote_average}
               backgroundImage={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
             />

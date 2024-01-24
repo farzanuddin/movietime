@@ -10,27 +10,12 @@ import { useEffect, useState } from "react";
 import { getMovies } from "./api";
 
 export const App = () => {
-  const [discovered, setDiscovered] = useState();
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await getMovies("/discover/movie");
-        setDiscovered(response);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
         <LeftSideMenu />
-        <Content discovered={discovered} />
+        <Content />
         <RightSideMenu />
       </AppContainer>
     </ThemeProvider>
