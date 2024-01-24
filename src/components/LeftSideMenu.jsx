@@ -1,8 +1,5 @@
 import { createElement, useState } from "react";
 import styled from "styled-components";
-
-import { theme } from "../styles/theme";
-
 import {
   HomeOutlined as Home,
   BookOutlined as Favorite,
@@ -13,6 +10,7 @@ import {
   SaveOutlined as Bookmarks,
   SettingOutlined as Settings,
 } from "@ant-design/icons";
+import { theme } from "../styles/theme";
 
 const listItems = {
   menu: ["home", "favorite", "purchase", "reminder"],
@@ -119,7 +117,7 @@ const ListItem = styled.li`
     margin-right: 20px;
   }
 
-  ${(props) => props['data-active'] && `color: ${theme.text.active};`}
-  ${(props) => props['data-active'] && `background: ${theme.section.active};`}
-  ${(props) => props['data-active'] && `border-left: 3px solid ${theme.text.active};`}
+  ${(props) => props["data-active"] && `color: ${theme.text.active};`}
+  ${(props) => props["data-active"] && `background: ${theme.section.active};`}
+  ${(props) => props["data-active"] && `border-left: 3px solid ${theme.text.active};`}
 `;

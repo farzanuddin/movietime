@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-
 import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
-
 import { getDataFromAPI, mapActorDetails } from "../api";
 import { debounce as _debounce, isEmpty as _isEmpty } from "lodash";
 import {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Header } from "./Header";
 import { StarFilled } from "@ant-design/icons";
+import { Header } from "./Header";
 import { getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 

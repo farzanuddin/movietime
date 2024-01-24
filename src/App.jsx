@@ -1,9 +1,7 @@
 import styled, { ThemeProvider } from "styled-components";
-
 import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
 import { Content } from "./components/Content";
-
 import { GlobalStyles } from "./styles/Global.styled";
 import { theme } from "./styles/theme";
 

@@ -1,25 +1,23 @@
 import styled from "styled-components";
-
 import { MenuOutlined as MenuIcon } from "@ant-design/icons";
-
-import user from "../assets/images/user.webp";
 import { theme } from "../styles/theme";
+import user from "../assets/images/user.webp";
 
 export const Header = () => {
   return (
     <Container>
       <MenuButton>
-        <MenuIcon style={{ color: theme.text.primary }} />
+        <StyledMenuIcon />
       </MenuButton>
       <FilterButton>
-        <UserImage src={user} />
+        <StyledUserImage src={user} />
       </FilterButton>
     </Container>
   );
 };
 
 const Container = styled.header`
-  padding: 20px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
 
@@ -27,14 +25,17 @@ const Container = styled.header`
     display: none;
   }
 `;
+const StyledMenuIcon = styled(MenuIcon)`
+  color: ${theme.text.primary};
+`;
 const MenuButton = styled.button`
   background: none;
+`;
+const StyledUserImage = styled.img`
+  border-radius: 50%;
 `;
 const FilterButton = styled.button`
   background: none;
   height: 30px;
   width: 30px;
-`;
-const UserImage = styled.img`
-  border-radius: 50%;
 `;
