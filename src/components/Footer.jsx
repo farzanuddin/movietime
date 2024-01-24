@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { MenuOutlined as MenuIcon, FilterOutlined as FilterIcon } from "@ant-design/icons";
 import { theme } from "../styles/theme";
-import PropTypes from "prop-types";
 
-export const Footer = ({ isDrawerOpen, isSecondDrawerOpen }) => {
+export const Footer = ({ isDrawerOpen = false, isSecondDrawerOpen }) => {
   return (
     <Container>
       <Button onClick={isDrawerOpen}>
@@ -14,10 +13,6 @@ export const Footer = ({ isDrawerOpen, isSecondDrawerOpen }) => {
       </SecondButton>
     </Container>
   );
-};
-Footer.propTypes = {
-  isDrawerOpen: PropTypes.boolean.isRequired,
-  isSecondDrawerOpen: PropTypes.boolean.isRequired,
 };
 const Container = styled.div`
   position: fixed;

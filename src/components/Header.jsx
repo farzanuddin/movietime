@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import user from "../assets/images/user.webp";
 import { theme } from "../styles/theme";
-import PropTypes from "prop-types";
 
 const Logo = ({ primary, secondary }) => {
   return (
@@ -10,10 +9,6 @@ const Logo = ({ primary, secondary }) => {
       <p>{secondary}</p>
     </LogoContainer>
   );
-};
-Logo.propTypes = {
-  primary: PropTypes.string.isRequired,
-  secondary: PropTypes.string.isRequired,
 };
 const LogoContainer = styled.div`
   display: flex;

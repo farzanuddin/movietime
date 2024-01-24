@@ -5,7 +5,6 @@ import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
 import dayjs from "dayjs";
-import PropTypes from "prop-types";
 
 const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   return (
@@ -22,16 +21,6 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
       </InformationContainer>
     </DiscoveredItemContainer>
   );
-};
-DiscoverItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  average: PropTypes.number.isRequired,
-  backgroundImage: PropTypes.string.isRequired,
-  genres: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 };
 const DiscoveredItemContainer = styled.div`
   display: flex;
@@ -180,9 +169,6 @@ const ActiveFilterSection = ({ activeFilter }) => {
     </>
   );
 };
-ActiveFilterSection.propTypes = {
-  activeFilter: PropTypes.string.isRequired,
-};
 const ActiveFilterContainer = styled.div`
   overflow-x: auto;
   display: grid;
@@ -258,9 +244,6 @@ export const Content = ({ activeFilter }) => {
       <ActiveFilterSection activeFilter={activeFilter} />
     </Container>
   );
-};
-Content.propTypes = {
-  activeFilter: PropTypes.string.isRequired,
 };
 const Container = styled.div`
   padding: 20px;
