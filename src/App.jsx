@@ -7,13 +7,15 @@ import { GlobalStyles } from "./styles/Global.styled";
 import { theme } from "./styles/theme";
 
 const App = () => {
+  const [activeFilter, setActiveFilter] = useState("now_playing");
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <AppContainer>
         <LeftSideMenu />
-        <Content />
-        <RightSideMenu />
+        <Content activeFilter={activeFilter}/>
+        <RightSideMenu activeFilter={activeFilter} setActiveFilter={setActiveFilter}/>
       </AppContainer>
     </ThemeProvider>
   );

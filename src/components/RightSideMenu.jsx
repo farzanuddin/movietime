@@ -215,7 +215,7 @@ const FilterItem = styled.button`
 const FilterButtons = ({ activeFilter, onFilterClick }) => {
   return (
     <FilterContainer>
-      {Object.entries(FILTERS)?.map(([filter, path]) => {
+      {FILTERS?.map((filter) => {
         return (
           <FilterButton
             key={filter}
@@ -380,8 +380,7 @@ const PopularActorsContainer = styled.div`
   padding: 0 20px;
 `;
 
-export const RightSideMenu = () => {
-  const [activeFilter, setActiveFilter] = useState("Now Playing");
+export const RightSideMenu = ({ activeFilter, setActiveFilter }) => {
   const [searchResults, setSearchResults] = useState([]);
 
   const handleFilterClick = (filter) => {
