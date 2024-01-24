@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
-import { getMovies } from "../api";
+import { getMovies, mapActorDetails } from "../api";
 import { debounce as _debounce, isEmpty as _isEmpty } from "lodash";
 import {
   BellOutlined as BellIcon,
@@ -181,6 +181,104 @@ const PopularPinned = () => {
 
 const PopularContainer = styled.div`
   padding: 0 20px;
+  h4 {
+    margin-bottom: 5px;
+  }
+`;
+
+const Actor = ({ image, name, origin, popularity }) => {
+  return (
+    <ActorContainer>
+      <ActorImage
+        style={{
+          backgroundImage: `url('https://image.tmdb.org/t/p/original${image}')`,
+        }}
+      />
+      
+      <ActorDetails>
+        <Details>
+          <b>{name}</b>
+          <p>{origin}</p>
+        </Details>
+        <Details>
+          <b>{popularity}</b>
+          <p>Followers</p>
+        </Details>
+      </ActorDetails>
+    </ActorContainer>
+  );
+};
+
+const ActorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+`;
+const ActorDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+`;
+const ActorImage = styled.div`
+  height: 50px;
+  width: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+
+  p {
+    color: ${theme.text.secondary};
+  }
+`;
+const PopularActors = () => {
+  const [actors, setActors] = useState([]);
+  useEffect(() => {
+    const fetchPopularActors = async () => {
+      try {
+        const response = await getMovies("/person/popular");
+        if (response && response.results) {
+          const actorsWithDetails = await Promise.all(
+            response.results.slice(0, 3).map(async (actor) => {
+              const actorDetails = await mapActorDetails(actor.id);
+              return { ...actor, details: actorDetails };
+            })
+          );
+
+          setActors(actorsWithDetails);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPopularActors();
+  }, []);
+  return (
+    <PopularActorsContainer>
+      {actors?.map((actor) => {
+        return (
+          <Actor
+            key={actor.id}
+            name={actor.name}
+            origin={actor.details.birth}
+            popularity={actor.details.popularity}
+            image={actor.details.profile}
+          />
+        );
+      })}
+    </PopularActorsContainer>
+  );
+};
+
+const PopularActorsContainer = styled.div`
+  padding: 0 20px;
 `;
 
 export const RightSideMenu = () => {
@@ -194,10 +292,11 @@ export const RightSideMenu = () => {
     <Container>
       <UserName />
       <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
-      {_isEmpty() && (
+      {_isEmpty(searchResults) && (
         <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
       )}
-      {_isEmpty() && <PopularPinned />}
+      {_isEmpty(searchResults) && <PopularPinned />}
+      {_isEmpty(searchResults) && <PopularActors />}
     </Container>
   );
 };

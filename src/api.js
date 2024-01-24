@@ -70,13 +70,8 @@ export const getMoviesWithGenres = async (endpoint) => {
     const response = await fetchData(endpoint);
 
     if (response && response.results) {
-      // Extract genre IDs from the movie data
       const genreIds = response.results.flatMap((movie) => movie.genre_ids);
-
-      // Map genre IDs to names
       const mappedGenres = await mapGenreIdsToNames(genreIds);
-
-      // Add the mapped genres back to the movie data
       const moviesWithGenres = response.results.map((movie) => ({
         ...movie,
         genres: movie.genre_ids.map((genreId) =>
@@ -93,3 +88,18 @@ export const getMoviesWithGenres = async (endpoint) => {
     return null;
   }
 };
+
+export const mapActorDetails = async (actorId) => {
+  try {
+    const res = await fetchData(`/person/${actorId}`);
+    const mappedActorDetails = {
+      name: res.name,
+      birth: res.place_of_birth,
+      profile: res.profile_path,
+      popularity: res.popularity,
+    }
+    return mappedActorDetails;
+  } catch (error) {
+    console.error(error);
+  }
+}
