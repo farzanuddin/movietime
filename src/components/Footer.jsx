@@ -28,6 +28,7 @@ const Container = styled.div`
 `;
 const Button = styled.button`
   background: ${theme.button.inactive};
+  color: ${theme.text.primary};
   border-radius: 50%;
   height: 60px;
   width: 60px;
