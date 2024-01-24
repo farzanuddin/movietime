@@ -10,7 +10,7 @@ export const theme = {
     active: "#48A0F8",
   },
   button: {
-    active: "#81C7C6",
+    active: "#5CA2A1",
     inactive: "#2A2C3D",
   },
   misc: {

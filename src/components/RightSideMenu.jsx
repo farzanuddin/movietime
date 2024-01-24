@@ -5,13 +5,20 @@ import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
 import { getMovies } from "../api";
-import { debounce as _debounce } from "lodash";
+import { debounce as _debounce, isEmpty as _isEmpty } from "lodash";
 import {
   BellOutlined as BellIcon,
   EnvironmentOutlined as EnvironmentIcon,
   SearchOutlined as SearchIcon,
   LoadingOutlined as Loader,
 } from "@ant-design/icons";
+
+const filters = {
+  "Now Playing": "/movie/now_playing",
+  Popular: "/movie/popular",
+  "Top Rated": "/movie/top_rated",
+  Upcoming: "/movie/upcoming",
+};
 
 const UserName = () => {
   return (
@@ -74,10 +81,9 @@ const SearchBar = () => {
         />
         <SearchIconContainer>{loading ? <Loader /> : <SearchIcon />}</SearchIconContainer>
       </SearchContainer>
-      <SearchResultsContainer>
-        {searchResults &&
-          searchResults.results &&
-          searchResults.results.slice(0, 10).map((movie) => (
+      {!_isEmpty(searchResults) && (
+        <SearchResultsContainer>
+          {searchResults?.results?.slice(0, 10).map((movie) => (
             <SearchResultsItem key={movie.id}>
               <SearchItemImage
                 style={{
@@ -90,54 +96,65 @@ const SearchBar = () => {
               </SearchItemInformation>
             </SearchResultsItem>
           ))}
-      </SearchResultsContainer>
+        </SearchResultsContainer>
+      )}
     </>
   );
 };
-const SearchItemInformation = styled.div`
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 1.2rem;
-`;
-const SearchItemText = styled.p`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  max-height: 50px;
-  color: ${theme.text.secondary};
-`;
-const SearchItemTitle = styled.p`
+
+const FilterButton = ({ filter, activeFilter, onFilterClick }) => {
+  const isActive = filter === activeFilter;
+
+  return (
+    <FilterItem data-active={isActive} onClick={() => onFilterClick(filter)}>
+      {filter}
+    </FilterItem>
+  );
+};
+
+const FilterButtons = ({ activeFilter, onFilterClick }) => {
+  return (
+    <FilterContainer>
+      {Object.entries(filters).map(([filter, path]) => (
+        <FilterButton
+          key={filter}
+          filter={filter}
+          activeFilter={activeFilter}
+          onFilterClick={onFilterClick}
+        />
+      ))}
+    </FilterContainer>
+  );
+};
+
+const FilterContainer = styled.div`
   display: flex;
-  margin-bottom: 10px;
-  font-weight: 800;
-`;
-const SearchResultsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
   padding: 20px;
-  max-height: 500px;
-  overflow-y: auto;
+  flex-wrap: wrap;
 `;
-const SearchItemImage = styled.div`
-  min-width: 150px;
-  border-radius: 10px;
-  border: none;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-const SearchResultsItem = styled.div`
-  display: flex;
-  background: ${theme.section.active};
-  border-radius: 10px;
+const FilterItem = styled.button`
+  padding: 10px;
   margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: ${(props) =>
+    props["data-active"] ? theme.button.active : theme.button.inactive};
+  color: ${(props) => (props["data-active"] ? theme.text.primary : theme.text.secondary)};
+  margin-right: 10px;
 `;
 
 export const RightSideMenu = () => {
+  const [activeFilter, setActiveFilter] = useState("Now Playing");
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+  };
   return (
     <Container>
       <UserName />
       <SearchBar />
+      <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
     </Container>
   );
 };
@@ -206,4 +223,43 @@ const NotificationDot = styled.div`
   height: 8px;
   background-color: ${theme.text.active};
   border-radius: 50%;
+`;
+
+const SearchItemInformation = styled.div`
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1.2rem;
+`;
+const SearchItemText = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-height: 50px;
+  color: ${theme.text.secondary};
+`;
+const SearchItemTitle = styled.p`
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: 800;
+`;
+const SearchResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+`;
+const SearchItemImage = styled.div`
+  min-width: 150px;
+  border-radius: 10px;
+  border: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+const SearchResultsItem = styled.div`
+  display: flex;
+  background: ${theme.section.active};
+  border-radius: 10px;
+  margin-bottom: 10px;
 `;
