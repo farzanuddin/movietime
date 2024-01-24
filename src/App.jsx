@@ -13,10 +13,15 @@ import { theme } from "./styles/theme";
 const App = () => {
   const [activeFilter, setActiveFilter] = useState("now_playing");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSecondDrawerOpen, setIsSecondDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
-  const handleDrawerOpen = () => {
-    setIsDrawerOpen(!isDrawerOpen);
+  const handleDrawerOpen = (drawerType) => {
+    if (drawerType === "first") {
+      setIsDrawerOpen(!isDrawerOpen);
+    } else if (drawerType === "second") {
+      setIsSecondDrawerOpen(!isSecondDrawerOpen);
+    }
   };
 
   useEffect(() => {
@@ -38,17 +43,31 @@ const App = () => {
       <AppContainer>
         {!isMobile && <LeftSideMenu />}
         <Content activeFilter={activeFilter} />
-        <RightSideMenu activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+        {!isMobile && (
+          <RightSideMenu activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+        )}
       </AppContainer>
-      <Footer handleDrawerOpen={handleDrawerOpen} />
+      <Footer
+        isDrawerOpen={() => handleDrawerOpen("first")}
+        isSecondDrawerOpen={() => handleDrawerOpen("second")}
+      />
       <Drawer
         open={isDrawerOpen}
-        onClose={handleDrawerOpen}
-        direction="right"
+        onClose={() => handleDrawerOpen("first")}
+        direction="left"
         lockBackgroundScroll="true"
         size="90vw"
       >
         <LeftSideMenu />
+      </Drawer>
+      <Drawer
+        open={isSecondDrawerOpen}
+        onClose={() => handleDrawerOpen("second")}
+        direction="right"
+        lockBackgroundScroll="true"
+        size="90vw"
+      >
+        <RightSideMenu activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       </Drawer>
     </ThemeProvider>
   );

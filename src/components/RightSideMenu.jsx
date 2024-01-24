@@ -33,8 +33,7 @@ const UserNameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  margin-top: 20px;
+  padding: 20px;
 `;
 const UserNameSection = styled.div`
   display: flex;
@@ -402,8 +401,4 @@ const Container = styled.aside`
   height: 100%;
   width: 100%;
   background: ${theme.section.background};
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
 `;

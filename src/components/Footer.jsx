@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { MenuOutlined as MenuIcon, FilterOutlined as FilterIcon } from "@ant-design/icons";
 import { theme } from "../styles/theme";
 
-export const Footer = ({ handleDrawerOpen }) => {
+export const Footer = ({ isDrawerOpen, isSecondDrawerOpen }) => {
   return (
     <Container>
-      <Button onClick={handleDrawerOpen}>
+      <Button onClick={isDrawerOpen}>
         <MenuIcon />
       </Button>
-      <SecondButton onClick={handleDrawerOpen}>
+      <SecondButton onClick={isSecondDrawerOpen}>
         <FilterIcon />
       </SecondButton>
     </Container>
