@@ -49,7 +49,7 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
         const response = await getMovies("/search/movie", term);
         setSearchResults(response);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -194,7 +194,7 @@ const Actor = ({ image, name, origin, popularity }) => {
           backgroundImage: `url('https://image.tmdb.org/t/p/original${image}')`,
         }}
       />
-      
+
       <ActorDetails>
         <Details>
           <b>{name}</b>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Header } from "./Header";
 import { StarFilled } from "@ant-design/icons";
-import { getMovies, getMoviesWithGenres } from "../api";
+import { getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 
 const useFetchMovies = () => {
@@ -14,7 +14,7 @@ const useFetchMovies = () => {
         const response = await getMoviesWithGenres("/discover/movie");
         setDiscovered(response);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error(error);
       }
     };
 
@@ -44,7 +44,7 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
 export const Content = () => {
   const discovered = useFetchMovies();
   const items = discovered.results && discovered.results.slice(0, 10);
-  
+
   return (
     <Container>
       <Header />

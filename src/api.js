@@ -22,7 +22,7 @@ const fetchData = async (endpoint) => {
 
     return response.data;
   } catch (error) {
-    console.error(`Error during data fetching for endpoint ${endpoint}`, error.message);
+    console.error(error);
     throw error;
   }
 };
@@ -32,7 +32,7 @@ export const getMovies = async (endpoint, query = "") => {
     const response = await fetchData(`${endpoint}${query && `?query=${query}`}`);
     return response;
   } catch (error) {
-    console.error(`Could not fetch any movies from ${endpoint}`, error);
+    console.error(error);
     return null;
   }
 };
@@ -60,7 +60,7 @@ const mapGenreIdsToNames = async (genreIds) => {
 
     return mappedGenres;
   } catch (error) {
-    console.error("Error mapping genre IDs to names", error.message);
+    console.error(error);
     throw error;
   }
 };
@@ -84,7 +84,7 @@ export const getMoviesWithGenres = async (endpoint) => {
 
     return null;
   } catch (error) {
-    console.error("Could not fetch movies with genres", error);
+    console.error(error);
     return null;
   }
 };
@@ -97,9 +97,9 @@ export const mapActorDetails = async (actorId) => {
       birth: res.place_of_birth,
       profile: res.profile_path,
       popularity: res.popularity,
-    }
+    };
     return mappedActorDetails;
   } catch (error) {
     console.error(error);
   }
-}
+};
