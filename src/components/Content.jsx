@@ -7,8 +7,26 @@ import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
 import dayjs from "dayjs";
 
 const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleImageLoad = () => {
+      setImageLoaded(true);
+    };
+
+    const image = new Image();
+    image.src = backgroundImage;
+    image.onload = handleImageLoad;
+
+    return () => {
+      image.onload = null;
+    };
+  }, [backgroundImage]);
+
   return (
-    <DiscoveredItemContainer style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <DiscoveredItemContainer
+      style={{ backgroundImage: imageLoaded ? `url(${backgroundImage})` : "none" }}
+    >
       <InformationContainer>
         <TextContainer>
           <p>{title}</p>
@@ -155,6 +173,7 @@ const ActiveFilterSection = ({ activeFilter }) => {
           return (
             <ActiveFilterItem
               key={id}
+              loading="lazy"
               style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
             >
               <ActiveFilterItemHover>
@@ -198,6 +217,7 @@ const ActiveFilterItem = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 
   &:hover {
     .hover-text {
