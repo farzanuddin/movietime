@@ -65,7 +65,6 @@ const NotificationDot = styled.div`
 const SearchBar = ({ searchResults, setSearchResults }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-
   const debouncedSearch = useCallback(
     _debounce(async (term) => {
       try {
