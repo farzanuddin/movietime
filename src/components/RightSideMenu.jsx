@@ -255,18 +255,19 @@ const PopularPinned = () => {
   return (
     <PopularContainer>
       {popular?.results?.slice(0, 2)?.map((movie) => {
+        const { id, backdrop_path, title, overview } = movie;
         return (
-          <SearchResultsItem key={movie.id}>
-            <SearchItemImage
+          <PopularResultsItem key={id}>
+            <PopularItemImage
               style={{
-                backgroundImage: `url('${IMAGE_URL_BASE}${movie.backdrop_path}')`,
+                backgroundImage: `url('${IMAGE_URL_BASE}${backdrop_path}')`,
               }}
             />
-            <SearchItemInformation>
-              <SearchItemTitle>{movie.title}</SearchItemTitle>
-              <SearchItemText>{movie.overview}</SearchItemText>
-            </SearchItemInformation>
-          </SearchResultsItem>
+            <PopularItemInformation>
+              <PopularItemTitle>{title}</PopularItemTitle>
+              <PopularItemText>{overview}</PopularItemText>
+            </PopularItemInformation>
+          </PopularResultsItem>
         );
       })}
     </PopularContainer>
@@ -278,6 +279,11 @@ const PopularContainer = styled.div`
     margin-bottom: 5px;
   }
 `;
+const PopularResultsItem = SearchResultsItem;
+const PopularItemImage = SearchItemImage;
+const PopularItemInformation = SearchItemInformation;
+const PopularItemTitle = SearchItemTitle;
+const PopularItemText = SearchItemText;
 
 const Actor = ({ image, name, origin, popularity }) => {
   return (
