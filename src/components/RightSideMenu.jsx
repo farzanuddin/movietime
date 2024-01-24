@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
 import { theme } from "../styles/theme";
@@ -38,9 +38,8 @@ const UserName = () => {
   );
 };
 
-const SearchBar = () => {
+const SearchBar = ({ searchResults, setSearchResults }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const debouncedSearch = useCallback(
@@ -130,7 +129,8 @@ const FilterButtons = ({ activeFilter, onFilterClick }) => {
 const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 20px;
+  padding: 0 20px;
+  margin-bottom: 10px;
   flex-wrap: wrap;
 `;
 const FilterItem = styled.button`
@@ -145,16 +145,59 @@ const FilterItem = styled.button`
   margin-right: 10px;
 `;
 
+const PopularPinned = () => {
+  const [popular, setPopular] = useState([]);
+  useEffect(() => {
+    const fetchPopularMovies = async () => {
+      try {
+        const response = await getMovies("/movie/popular");
+        setPopular(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPopularMovies();
+  }, []);
+  return (
+    <PopularContainer>
+      {popular?.results?.slice(0, 2).map((movie) => {
+        return (
+          <SearchResultsItem key={movie.id}>
+            <SearchItemImage
+              style={{
+                backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`,
+              }}
+            />
+            <SearchItemInformation>
+              <SearchItemTitle>{movie.title}</SearchItemTitle>
+              <SearchItemText>{movie.overview}</SearchItemText>
+            </SearchItemInformation>
+          </SearchResultsItem>
+        );
+      })}
+    </PopularContainer>
+  );
+};
+
+const PopularContainer = styled.div`
+  padding: 0 20px;
+`;
+
 export const RightSideMenu = () => {
   const [activeFilter, setActiveFilter] = useState("Now Playing");
+  const [searchResults, setSearchResults] = useState([]);
+
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
   return (
     <Container>
       <UserName />
-      <SearchBar />
-      <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
+      <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
+      {_isEmpty() && (
+        <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
+      )}
+      {_isEmpty() && <PopularPinned />}
     </Container>
   );
 };
@@ -172,7 +215,8 @@ const UserNameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 0 20px;
+  margin-top: 20px;
 `;
 const Cont = styled.div`
   display: flex;
@@ -245,7 +289,7 @@ const SearchItemTitle = styled.p`
 const SearchResultsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 0 20px;
   max-height: 500px;
   overflow-y: auto;
 `;
