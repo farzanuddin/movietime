@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { StarFilled } from "@ant-design/icons";
-import { Header } from "./Header";
 import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
@@ -47,7 +46,7 @@ const DiscoveredItemContainer = styled.div`
   }
 
   @media (max-width: 1024px) {
-    height: 150px;
+    height: 200px;
     min-width: 300px;
     width: 100%;
   }
@@ -150,7 +149,6 @@ const ActiveFilterSection = ({ activeFilter }) => {
         {activeFilterMovies?.results?.slice(0, 10).map((movie) => {
           const { title, backdrop_path, id, release_date } = movie;
           const backgroundImage = backdrop_path;
-          console.log(movie);
           return (
             <ActiveFilterItem
               key={id}
@@ -170,18 +168,25 @@ const ActiveFilterSection = ({ activeFilter }) => {
 const ActiveFilterContainer = styled.div`
   overflow-x: auto;
   display: grid;
+  grid-template-rows: repeat(2, 1fr);
   grid-auto-flow: column;
   gap: 20px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
-    display: none;s
+    display: none;
   }
   border-radius: 10px;
   margin-top: 20px;
+
+  @media (min-width: 1024px) {
+    grid-template-rows: auto;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
 `;
 const ActiveFilterItem = styled.div`
+  display: flex;
   position: relative;
   height: 250px;
   min-width: 200px;
@@ -195,6 +200,11 @@ const ActiveFilterItem = styled.div`
     .hover-text {
       opacity: 1;
     }
+  }
+
+  @media (max-width: 1024px) {
+    height: 230px;
+    min-width: 250px;
   }
 `;
 const ActiveFilterItemHover = styled.div`
@@ -225,7 +235,6 @@ const ActiveFilterItemHover = styled.div`
 export const Content = ({ activeFilter }) => {
   return (
     <Container>
-      <Header />
       <h2>Discover Movies:</h2>
       <DiscoveredSection />
       <ActiveFilterSection activeFilter={activeFilter} />

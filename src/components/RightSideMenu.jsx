@@ -212,7 +212,7 @@ const FilterItem = styled.button`
   margin-right: 10px;
 `;
 
-const FilterButtons = ({ activeFilter, onFilterClick }) => {
+export const FilterButtons = ({ activeFilter, onFilterClick }) => {
   return (
     <FilterContainer>
       {FILTERS?.map((filter) => {

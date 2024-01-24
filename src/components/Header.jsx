@@ -1,14 +1,11 @@
 import styled from "styled-components";
-import { MenuOutlined as MenuIcon } from "@ant-design/icons";
-import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
+import { Logo } from "./LeftSideMenu";
 
 export const Header = () => {
   return (
     <Container>
-      <MenuButton>
-        <StyledMenuIcon />
-      </MenuButton>
+      <Logo primary="Mov" secondary=".time" />
       <FilterButton>
         <StyledUserImage src={user} />
       </FilterButton>
@@ -17,19 +14,14 @@ export const Header = () => {
 };
 
 const Container = styled.header`
-  margin-bottom: 20px;
+  margin: 20px 20px 0 20px;
+
   display: flex;
   justify-content: space-between;
 
   @media (min-width: 1024px) {
     display: none;
   }
-`;
-const StyledMenuIcon = styled(MenuIcon)`
-  color: ${theme.text.primary};
-`;
-const MenuButton = styled.button`
-  background: none;
 `;
 const StyledUserImage = styled.img`
   border-radius: 50%;
