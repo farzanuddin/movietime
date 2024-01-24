@@ -1,5 +1,6 @@
-import { createElement, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+
 import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
@@ -8,6 +9,7 @@ import {
   EnvironmentOutlined as EnvironmentIcon,
   SearchOutlined as SearchIcon,
 } from "@ant-design/icons";
+
 const UserName = () => {
   return (
     <UserNameContainer>
@@ -48,28 +50,11 @@ const SearchBar = () => {
   );
 };
 
-const FilterBar = () => {
-  const [activeButton, setActiveButton] = useState("");
-  const handleButtonClick = (buttonLabel) => {
-    setActiveButton(buttonLabel === activeButton);
-  };
-  return (
-    <ButtonsContainer>
-      <Button>Amazon Prime</Button>
-      <Button>Apple TV</Button>
-      <Button>Disney+</Button>
-      <Button>Hulu</Button>
-      <Button>Youtube</Button>
-    </ButtonsContainer>
-  );
-};
-
 export const RightSideMenu = () => {
   return (
     <Container>
       <UserName />
       <SearchBar />
-      <FilterBar />
     </Container>
   );
 };
@@ -125,7 +110,7 @@ const SearchIconContainer = styled.div`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: ${theme.text.secondary}; /* Add a color to the icon */
+  color: ${theme.text.secondary};
 `;
 const BellContainer = styled.div`
   position: relative;
@@ -138,17 +123,4 @@ const NotificationDot = styled.div`
   height: 8px;
   background-color: ${theme.text.active};
   border-radius: 50%;
-`;
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0 20px;
-`;
-const Button = styled.button`
-  padding: 15px;
-  border-radius: 10px;
-  background: ${theme.button.inactive};
-  color: ${theme.text.primary};
-  margin-bottom: 10px;
-  margin-right: 10px;
 `;

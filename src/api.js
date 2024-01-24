@@ -3,7 +3,6 @@ import axios from "axios";
 const AUTH_KEY =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMTJjMmRmNTVhZGVlZTYxNzk1NDBjMmI5MzlhNmMyNCIsInN1YiI6IjY1YWZjZGM3YmQ1ODhiMDBhZDk2MzFiNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.GnVtIe2UaNEW6gk0hptaOab1nsmkdfKK9eSAnwPTayI";
 const URL_BASE = "https://api.themoviedb.org/3";
-// const API_KEY = "c12c2df55adeee6179540c2b939a6c24";
 
 const fetchData = async (endpoint) => {
   const options = {

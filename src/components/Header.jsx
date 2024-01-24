@@ -1,32 +1,17 @@
-import { useState } from "react";
-import { MenuOutlined as MenuIcon } from "@ant-design/icons";
-import user from "../assets/images/user.webp";
 import styled from "styled-components";
+
+import { MenuOutlined as MenuIcon } from "@ant-design/icons";
+
+import user from "../assets/images/user.webp";
 import { theme } from "../styles/theme";
 
 export const Header = () => {
-  const [leftMenuVisible, setLeftMenuVisible] = useState(false);
-  const [rightMenuVisible, setRightMenuVisible] = useState(false);
-
-  const toggleMenuVisibility = (menu) => {
-    if (menu === "left") {
-      setLeftMenuVisible((prevLeftMenuVisible) => !prevLeftMenuVisible);
-      setRightMenuVisible(false);
-    } else if (menu === "right") {
-      setRightMenuVisible((prevRightMenuVisible) => !prevRightMenuVisible);
-      setLeftMenuVisible(false);
-    }
-  };
-
   return (
     <Container>
-      <MenuButton onClick={() => toggleMenuVisibility("left")}>
-        <MenuIcon
-          style={{ color: theme.text.primary }}
-          onClick={() => toggleMenuVisibility("left")}
-        />
+      <MenuButton>
+        <MenuIcon style={{ color: theme.text.primary }} />
       </MenuButton>
-      <FilterButton onClick={() => toggleMenuVisibility("right")}>
+      <FilterButton>
         <UserImage src={user} />
       </FilterButton>
     </Container>

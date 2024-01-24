@@ -6,10 +6,8 @@ import { theme } from "./styles/theme";
 import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
 import { Content } from "./components/Content";
-import { useEffect, useState } from "react";
-import { getMovies } from "./api";
 
-export const App = () => {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -36,3 +34,5 @@ const AppContainer = styled.div`
     flex-direction: column;
   }
 `;
+
+export default App;
