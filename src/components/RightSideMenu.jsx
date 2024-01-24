@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import styled from "styled-components";
 
 import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
+import { getMovies } from "../api";
+import { debounce as _debounce } from "lodash";
 import {
   BellOutlined as BellIcon,
   EnvironmentOutlined as EnvironmentIcon,
   SearchOutlined as SearchIcon,
+  LoadingOutlined as Loader,
 } from "@ant-design/icons";
-import { getMovies } from "../api";
 
 const UserName = () => {
   return (
@@ -32,18 +34,33 @@ const UserName = () => {
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const debouncedSearch = useCallback(
+    _debounce(async (term) => {
+      try {
+        setLoading(true);
+        const response = await getMovies("/search/movie", term);
+        setSearchResults(response);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      } finally {
+        setLoading(false);
+      }
+    }, 300),
+    []
+  );
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-  const handleSearch = async () => {
-    if (!searchTerm) return;
-    try {
-      const response = await getMovies("/search/movie", searchTerm);
-      setSearchResults(response);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
+    const newSearchTerm = event.target.value;
+    setSearchTerm(newSearchTerm);
+
+    if (!newSearchTerm) {
+      setSearchResults([]);
+      return;
     }
+
+    debouncedSearch(newSearchTerm);
   };
 
   return (
@@ -55,9 +72,7 @@ const SearchBar = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <SearchIconContainer>
-          <SearchIcon onClick={() => handleSearch()} />
-        </SearchIconContainer>
+        <SearchIconContainer>{loading ? <Loader /> : <SearchIcon />}</SearchIconContainer>
       </SearchContainer>
       <SearchResultsContainer>
         {searchResults &&
