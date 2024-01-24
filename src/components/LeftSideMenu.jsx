@@ -32,14 +32,25 @@ const Logo = ({ primary, secondary }) => {
   return (
     <LogoContainer>
       <LogoSpan>{primary}</LogoSpan>
-      {secondary}
+      <p>{secondary}</p>
     </LogoContainer>
   );
 };
+const LogoContainer = styled.div`
+  display: flex;
+  padding: 20px;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+const LogoSpan = styled.span`
+  color: ${theme.text.active};
+`;
 
 const List = ({ category, items, activeTab, onTabClick }) => {
   return (
-    <ListContainer key={category}>
+    <div key={category}>
       <ListTitle>{category.toUpperCase()}</ListTitle>
       <ul>
         {items.map((item, index) => (
@@ -49,11 +60,35 @@ const List = ({ category, items, activeTab, onTabClick }) => {
           </ListItem>
         ))}
       </ul>
-    </ListContainer>
+    </div>
   );
 };
+const ListTitle = styled.p`
+  color: ${theme.text.secondary};
+  padding: 20px;
+  font-size: 12px;
+`;
+const ListItem = styled.li`
+  color: ${(props) => (props["data-active"] ? theme.text.active : theme.text.secondary)};
+  font-size: 13px;
+  text-transform: capitalize;
+  padding: 20px;
+  cursor: pointer;
 
-const LeftSideMenuOptions = ({ activeTab, onTabClick }) => {
+  & svg {
+    margin-right: 20px;
+  }
+
+  ${(props) =>
+    props["data-active"] &&
+    `
+      color: ${theme.text.active};
+      background: ${theme.section.active};
+      border-left: 3px solid ${theme.text.active};
+    `}
+`;
+
+const Options = ({ activeTab, onTabClick }) => {
   return Object.entries(listItems).map(([category, items]) => (
     <List
       key={category}
@@ -75,22 +110,10 @@ export const LeftSideMenu = () => {
   return (
     <Container>
       <Logo primary="Mov" secondary=".time" />
-      <LeftSideMenuOptions activeTab={activeTab} onTabClick={handleTabClick} />
+      <Options activeTab={activeTab} onTabClick={handleTabClick} />
     </Container>
   );
 };
-
-const LogoContainer = styled.p`
-  display: flex;
-  padding: 20px;
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-`;
-const LogoSpan = styled.span`
-  color: ${theme.text.active};
-`;
 const Container = styled.aside`
   height: 100%;
   width: 100%;
@@ -99,25 +122,4 @@ const Container = styled.aside`
   @media (max-width: 1024px) {
     display: none;
   }
-`;
-const ListContainer = styled.div``;
-const ListTitle = styled.p`
-  color: ${theme.text.secondary};
-  padding: 20px;
-  font-size: 12px;
-`;
-const ListItem = styled.li`
-  color: ${theme.text.secondary};
-  font-size: 13px;
-  text-transform: capitalize;
-  padding: 20px;
-  cursor: pointer;
-
-  & svg {
-    margin-right: 20px;
-  }
-
-  ${(props) => props["data-active"] && `color: ${theme.text.active};`}
-  ${(props) => props["data-active"] && `background: ${theme.section.active};`}
-  ${(props) => props["data-active"] && `border-left: 3px solid ${theme.text.active};`}
 `;

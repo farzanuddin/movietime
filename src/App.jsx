@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import { LeftSideMenu } from "./components/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu";
