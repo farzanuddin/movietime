@@ -27,9 +27,9 @@ const fetchData = async (endpoint) => {
   }
 };
 
-export const getMovies = async (endpoint) => {
+export const getMovies = async (endpoint, query = "") => {
   try {
-    const response = await fetchData(`${endpoint}`);
+    const response = await fetchData(`${endpoint}${query && `?query=${query}`}`);
     return response;
   } catch (error) {
     console.error(`Could not fetch any movies from ${endpoint}`, error);

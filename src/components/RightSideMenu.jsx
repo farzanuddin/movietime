@@ -9,6 +9,7 @@ import {
   EnvironmentOutlined as EnvironmentIcon,
   SearchOutlined as SearchIcon,
 } from "@ant-design/icons";
+import { getMovies } from "../api";
 
 const UserName = () => {
   return (
@@ -30,25 +31,92 @@ const UserName = () => {
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+  const handleSearch = async () => {
+    if (!searchTerm) return;
+    try {
+      const response = await getMovies("/search/movie", searchTerm);
+      setSearchResults(response);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  };
 
   return (
-    <SearchContainer>
-      <SearchInput
-        type="text"
-        placeholder="Search"
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      <SearchIconContainer>
-        <SearchIcon />
-      </SearchIconContainer>
-    </SearchContainer>
+    <>
+      <SearchContainer>
+        <SearchInput
+          type="text"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+        <SearchIconContainer>
+          <SearchIcon onClick={() => handleSearch()} />
+        </SearchIconContainer>
+      </SearchContainer>
+      <SearchResultsContainer>
+        {searchResults &&
+          searchResults.results &&
+          searchResults.results.slice(0, 10).map((movie) => (
+            <SearchResultsItem key={movie.id}>
+              <SearchItemImage
+                style={{
+                  backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`,
+                }}
+              />
+              <SearchItemInformation>
+                <SearchItemTitle>{movie.title}</SearchItemTitle>
+                <SearchItemText>{movie.overview}</SearchItemText>
+              </SearchItemInformation>
+            </SearchResultsItem>
+          ))}
+      </SearchResultsContainer>
+    </>
   );
 };
+const SearchItemInformation = styled.div`
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1.2rem;
+`;
+const SearchItemText = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-height: 50px;
+  color: ${theme.text.secondary};
+`;
+const SearchItemTitle = styled.p`
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: 800;
+`;
+const SearchResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+`;
+const SearchItemImage = styled.div`
+  min-width: 150px;
+  border-radius: 10px;
+  border: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+const SearchResultsItem = styled.div`
+  display: flex;
+  background: ${theme.section.active};
+  border-radius: 10px;
+  margin-bottom: 10px;
+`;
 
 export const RightSideMenu = () => {
   return (
