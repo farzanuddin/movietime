@@ -62,7 +62,6 @@ const StarContainer = styled.div`
   border-radius: 5px;
   padding: 5px;
   width: auto;
-  background: ${theme.text.primary};
   position: relative;
   z-index: 2;
 `;
