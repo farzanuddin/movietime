@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { theme } from "../styles/theme";
 import user from "../assets/images/user.webp";
 
-import { getMovies, mapActorDetails } from "../api";
+import { getDataFromAPI, mapActorDetails } from "../api";
 import { debounce as _debounce, isEmpty as _isEmpty } from "lodash";
 import {
   BellOutlined as BellIcon,
@@ -46,7 +46,7 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
     _debounce(async (term) => {
       try {
         setLoading(true);
-        const response = await getMovies("/search/movie", term);
+        const response = await getDataFromAPI("/search/movie", term);
         setSearchResults(response);
       } catch (error) {
         console.error(error);
@@ -150,7 +150,7 @@ const PopularPinned = () => {
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
-        const response = await getMovies("/movie/popular");
+        const response = await getDataFromAPI("/movie/popular");
         setPopular(response);
       } catch (error) {
         console.error(error);
@@ -242,7 +242,7 @@ const PopularActors = () => {
   useEffect(() => {
     const fetchPopularActors = async () => {
       try {
-        const response = await getMovies("/person/popular");
+        const response = await getDataFromAPI("/person/popular");
         if (response && response.results) {
           const actorsWithDetails = await Promise.all(
             response.results.slice(0, 3).map(async (actor) => {
