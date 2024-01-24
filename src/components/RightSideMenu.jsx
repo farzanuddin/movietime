@@ -10,7 +10,7 @@ import {
   SearchOutlined as SearchIcon,
   LoadingOutlined as Loader,
 } from "@ant-design/icons";
-import { FILTERS, LOGGED_IN_USER } from "../constants";
+import { FILTERS, IMAGE_URL_BASE, LOGGED_IN_USER } from "../constants";
 
 const UserName = () => {
   return (
@@ -107,234 +107,27 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
       </SearchContainer>
       {!_isEmpty(searchResults) && (
         <SearchResultsContainer>
-          {searchResults?.results?.slice(0, 10).map((movie) => (
-            <SearchResultsItem key={movie.id}>
-              <SearchItemImage
-                style={{
-                  backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`,
-                }}
-              />
-              <SearchItemInformation>
-                <SearchItemTitle>{movie.title}</SearchItemTitle>
-                <SearchItemText>{movie.overview}</SearchItemText>
-              </SearchItemInformation>
-            </SearchResultsItem>
-          ))}
+          {searchResults?.results?.slice(0, 10).map((movie) => {
+            const { id, backdrop_path, title, overview } = movie;
+            return (
+              <SearchResultsItem key={id}>
+                <SearchItemImage
+                  style={{
+                    backgroundImage: `url('${IMAGE_URL_BASE}${backdrop_path}')`,
+                  }}
+                />
+                <SearchItemInformation>
+                  <SearchItemTitle>{title}</SearchItemTitle>
+                  <SearchItemText>{overview}</SearchItemText>
+                </SearchItemInformation>
+              </SearchResultsItem>
+            );
+          })}
         </SearchResultsContainer>
       )}
     </>
   );
 };
-
-const FilterButton = ({ filter, activeFilter, onFilterClick }) => {
-  const isActive = filter === activeFilter;
-
-  return (
-    <FilterItem data-active={isActive} onClick={() => onFilterClick(filter)}>
-      {filter}
-    </FilterItem>
-  );
-};
-
-const FilterButtons = ({ activeFilter, onFilterClick }) => {
-  return (
-    <FilterContainer>
-      {Object.entries(FILTERS)?.map(([filter, path]) => (
-        <FilterButton
-          key={filter}
-          filter={filter}
-          activeFilter={activeFilter}
-          onFilterClick={onFilterClick}
-        />
-      ))}
-    </FilterContainer>
-  );
-};
-
-const FilterContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0 20px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-`;
-const FilterItem = styled.button`
-  padding: 10px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: ${(props) =>
-    props["data-active"] ? theme.button.active : theme.button.inactive};
-  color: ${(props) => (props["data-active"] ? theme.text.primary : theme.text.secondary)};
-  margin-right: 10px;
-`;
-
-const PopularPinned = () => {
-  const [popular, setPopular] = useState([]);
-  useEffect(() => {
-    const fetchPopularMovies = async () => {
-      try {
-        const response = await getDataFromAPI("/movie/popular");
-        setPopular(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchPopularMovies();
-  }, []);
-  return (
-    <PopularContainer>
-      {popular?.results?.slice(0, 2)?.map((movie) => {
-        return (
-          <SearchResultsItem key={movie.id}>
-            <SearchItemImage
-              style={{
-                backgroundImage: `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`,
-              }}
-            />
-            <SearchItemInformation>
-              <SearchItemTitle>{movie.title}</SearchItemTitle>
-              <SearchItemText>{movie.overview}</SearchItemText>
-            </SearchItemInformation>
-          </SearchResultsItem>
-        );
-      })}
-    </PopularContainer>
-  );
-};
-
-const PopularContainer = styled.div`
-  padding: 0 20px;
-  h4 {
-    margin-bottom: 5px;
-  }
-`;
-
-const Actor = ({ image, name, origin, popularity }) => {
-  return (
-    <ActorContainer>
-      <ActorImage
-        style={{
-          backgroundImage: `url('https://image.tmdb.org/t/p/original${image}')`,
-        }}
-      />
-
-      <ActorDetails>
-        <Details>
-          <b>{name}</b>
-          <p>{origin}</p>
-        </Details>
-        <Details>
-          <b>{popularity}</b>
-          <p>Followers</p>
-        </Details>
-      </ActorDetails>
-    </ActorContainer>
-  );
-};
-
-const ActorContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-`;
-const ActorDetails = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-grow: 1;
-`;
-const ActorImage = styled.div`
-  height: 50px;
-  width: 50px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-  margin-right: 10px;
-`;
-const Details = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 1.2rem;
-
-  p {
-    color: ${theme.text.secondary};
-  }
-`;
-const PopularActors = () => {
-  const [actors, setActors] = useState([]);
-  useEffect(() => {
-    const fetchPopularActors = async () => {
-      try {
-        const response = await getDataFromAPI("/person/popular");
-        if (response && response.results) {
-          const actorsWithDetails = await Promise.all(
-            response?.results?.slice(0, 3).map(async (actor) => {
-              const actorDetails = await mapActorDetails(actor.id);
-              return { ...actor, details: actorDetails };
-            })
-          );
-
-          setActors(actorsWithDetails);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPopularActors();
-  }, []);
-  return (
-    <PopularActorsContainer>
-      {actors?.map((actor) => {
-        return (
-          <Actor
-            key={actor.id}
-            name={actor.name}
-            origin={actor.details.birth}
-            popularity={actor.details.popularity}
-            image={actor.details.profile}
-          />
-        );
-      })}
-    </PopularActorsContainer>
-  );
-};
-
-const PopularActorsContainer = styled.div`
-  padding: 0 20px;
-`;
-
-export const RightSideMenu = () => {
-  const [activeFilter, setActiveFilter] = useState("Now Playing");
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleFilterClick = (filter) => {
-    setActiveFilter(filter);
-  };
-  return (
-    <Container>
-      <UserName />
-      <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
-      {_isEmpty(searchResults) && (
-        <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
-      )}
-      {_isEmpty(searchResults) && <PopularPinned />}
-      {_isEmpty(searchResults) && <PopularActors />}
-    </Container>
-  );
-};
-
-const Container = styled.aside`
-  height: 100%;
-  width: 100%;
-  background: ${theme.section.background};
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-`;
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
@@ -359,29 +152,18 @@ const SearchIconContainer = styled.div`
   cursor: pointer;
   color: ${theme.text.secondary};
 `;
-const SearchItemInformation = styled.div`
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 1.2rem;
-`;
-const SearchItemText = styled.p`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  max-height: 50px;
-  color: ${theme.text.secondary};
-`;
-const SearchItemTitle = styled.p`
-  display: flex;
-  margin-bottom: 10px;
-  font-weight: 800;
-`;
 const SearchResultsContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 20px;
   max-height: 500px;
   overflow-y: auto;
+`;
+const SearchResultsItem = styled.div`
+  display: flex;
+  background: ${theme.section.active};
+  border-radius: 10px;
+  margin-bottom: 10px;
 `;
 const SearchItemImage = styled.div`
   min-width: 150px;
@@ -391,9 +173,232 @@ const SearchItemImage = styled.div`
   background-position: center;
   background-repeat: no-repeat;
 `;
-const SearchResultsItem = styled.div`
+const SearchItemInformation = styled.div`
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 1.2rem;
+`;
+const SearchItemTitle = styled.p`
   display: flex;
-  background: ${theme.section.active};
-  border-radius: 10px;
   margin-bottom: 10px;
+  font-weight: 800;
+`;
+const SearchItemText = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-height: 50px;
+  color: ${theme.text.secondary};
+`;
+
+const FilterButton = ({ filter, activeFilter, onFilterClick }) => {
+  const isActive = filter === activeFilter;
+
+  return (
+    <FilterItem data-active={isActive} onClick={() => onFilterClick(filter)}>
+      {filter}
+    </FilterItem>
+  );
+};
+const FilterItem = styled.button`
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: ${(props) =>
+    props["data-active"] ? theme.button.active : theme.button.inactive};
+  color: ${(props) => (props["data-active"] ? theme.text.primary : theme.text.secondary)};
+  margin-right: 10px;
+`;
+
+const FilterButtons = ({ activeFilter, onFilterClick }) => {
+  return (
+    <FilterContainer>
+      {Object.entries(FILTERS)?.map(([filter, path]) => {
+        return (
+          <FilterButton
+            key={filter}
+            filter={filter}
+            activeFilter={activeFilter}
+            onFilterClick={onFilterClick}
+          />
+        );
+      })}
+    </FilterContainer>
+  );
+};
+const FilterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+`;
+
+const PopularPinned = () => {
+  const [popular, setPopular] = useState([]);
+
+  useEffect(() => {
+    const fetchPopularMovies = async () => {
+      try {
+        const response = await getDataFromAPI("/movie/popular");
+        setPopular(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPopularMovies();
+  }, []);
+
+  return (
+    <PopularContainer>
+      {popular?.results?.slice(0, 2)?.map((movie) => {
+        return (
+          <SearchResultsItem key={movie.id}>
+            <SearchItemImage
+              style={{
+                backgroundImage: `url('${IMAGE_URL_BASE}${movie.backdrop_path}')`,
+              }}
+            />
+            <SearchItemInformation>
+              <SearchItemTitle>{movie.title}</SearchItemTitle>
+              <SearchItemText>{movie.overview}</SearchItemText>
+            </SearchItemInformation>
+          </SearchResultsItem>
+        );
+      })}
+    </PopularContainer>
+  );
+};
+const PopularContainer = styled.div`
+  padding: 0 20px;
+  h4 {
+    margin-bottom: 5px;
+  }
+`;
+
+const Actor = ({ image, name, origin, popularity }) => {
+  return (
+    <ActorContainer>
+      <ActorImage
+        style={{
+          backgroundImage: `url('${IMAGE_URL_BASE}${image}')`,
+        }}
+      />
+      <ActorDetailContainer>
+        <ActorDetails>
+          <b>{name}</b>
+          <p>{origin}</p>
+        </ActorDetails>
+        <ActorDetails>
+          <b>{popularity}</b>
+          <p>Followers</p>
+        </ActorDetails>
+      </ActorDetailContainer>
+    </ActorContainer>
+  );
+};
+const ActorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+`;
+const ActorImage = styled.div`
+  height: 50px;
+  width: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+const ActorDetailContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+`;
+const ActorDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+
+  p {
+    color: ${theme.text.secondary};
+  }
+`;
+
+const PopularActors = () => {
+  const [actors, setActors] = useState([]);
+
+  useEffect(() => {
+    const fetchPopularActors = async () => {
+      try {
+        const response = await getDataFromAPI("/person/popular");
+        if (response && response.results) {
+          const actorsWithDetails = await Promise.all(
+            response?.results?.slice(0, 3).map(async (actor) => {
+              const actorDetails = await mapActorDetails(actor.id);
+              return { ...actor, details: actorDetails };
+            })
+          );
+
+          setActors(actorsWithDetails);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPopularActors();
+  }, []);
+
+  return (
+    <PopularActorsContainer>
+      {actors?.map((actor) => {
+        return (
+          <Actor
+            key={actor.id}
+            name={actor.name}
+            origin={actor.details.birth}
+            popularity={actor.details.popularity}
+            image={actor.details.profile}
+          />
+        );
+      })}
+    </PopularActorsContainer>
+  );
+};
+const PopularActorsContainer = styled.div`
+  padding: 0 20px;
+`;
+
+export const RightSideMenu = () => {
+  const [activeFilter, setActiveFilter] = useState("Now Playing");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+  };
+  return (
+    <Container>
+      <UserName />
+      <SearchBar searchResults={searchResults} setSearchResults={setSearchResults} />
+      {_isEmpty(searchResults) && (
+        <FilterButtons activeFilter={activeFilter} onFilterClick={handleFilterClick} />
+      )}
+      {_isEmpty(searchResults) && <PopularPinned />}
+      {_isEmpty(searchResults) && <PopularActors />}
+    </Container>
+  );
+};
+const Container = styled.aside`
+  height: 100%;
+  width: 100%;
+  background: ${theme.section.background};
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;

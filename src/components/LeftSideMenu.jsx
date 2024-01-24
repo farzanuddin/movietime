@@ -49,12 +49,14 @@ const List = ({ category, items, activeTab, onTabClick }) => {
     <div key={category}>
       <ListTitle>{category.toUpperCase()}</ListTitle>
       <ul>
-        {items?.map((item, index) => (
-          <ListItem key={index} onClick={() => onTabClick(item)} data-active={activeTab === item}>
-            {createElement(iconMapping[item])}
-            {item}
-          </ListItem>
-        ))}
+        {items?.map((item, index) => {
+          return (
+            <ListItem key={index} onClick={() => onTabClick(item)} data-active={activeTab === item}>
+              {createElement(iconMapping[item])}
+              {item}
+            </ListItem>
+          );
+        })}
       </ul>
     </div>
   );
@@ -85,15 +87,17 @@ const ListItem = styled.li`
 `;
 
 const Options = ({ activeTab, onTabClick }) => {
-  return Object.entries(LIST_ITEMS)?.map(([category, items]) => (
-    <List
-      key={category}
-      category={category}
-      items={items}
-      activeTab={activeTab}
-      onTabClick={onTabClick}
-    />
-  ));
+  return Object.entries(LIST_ITEMS)?.map(([category, items]) => {
+    return (
+      <List
+        key={category}
+        category={category}
+        items={items}
+        activeTab={activeTab}
+        onTabClick={onTabClick}
+      />
+    );
+  });
 };
 
 export const LeftSideMenu = () => {

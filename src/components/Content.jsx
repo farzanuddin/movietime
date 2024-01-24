@@ -4,25 +4,7 @@ import { StarFilled } from "@ant-design/icons";
 import { Header } from "./Header";
 import { getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
-
-const useFetchMovies = () => {
-  const [discovered, setDiscovered] = useState([]);
-
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await getMoviesWithGenres("/discover/movie");
-        setDiscovered(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
-  return discovered;
-};
+import { IMAGE_URL_BASE } from "../constants";
 
 const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   return (
@@ -42,23 +24,38 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
 };
 
 export const Content = () => {
-  const discovered = useFetchMovies();
-  const items = discovered?.results?.slice(0, 10);
+  const [discovered, setDiscovered] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await getMoviesWithGenres("/discover/movie");
+        setDiscovered(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
 
   return (
     <Container>
       <Header />
       <h2>Discovers</h2>
       <DiscoveredSection>
-        {items?.map((item) => (
-          <DiscoverItem
-            key={item.id}
-            title={item.title}
-            average={item.vote_average}
-            backgroundImage={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
-            genres={item.genres}
-          />
-        ))}
+        {discovered?.results?.slice(0, 10)?.map((movie) => {
+          const { id, title, vote_average, backdrop_path, genres } = movie;
+          return (
+            <DiscoverItem
+              key={id}
+              title={title}
+              average={vote_average}
+              backgroundImage={`${IMAGE_URL_BASE}${backdrop_path}`}
+              genres={genres}
+            />
+          );
+        })}
       </DiscoveredSection>
     </Container>
   );
