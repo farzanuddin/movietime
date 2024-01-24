@@ -35,6 +35,7 @@ const Logo = ({ primary, secondary }) => {
 const LogoContainer = styled.div`
   display: flex;
   font-size: 2rem;
+  padding: 20px;
 
   @media (max-width: 1024px) {
     display: none;
@@ -64,14 +65,18 @@ const List = ({ category, items, activeTab, onTabClick }) => {
 const ListTitle = styled.p`
   color: ${theme.text.secondary};
   padding: 20px;
-  font-size: 12px;
+  font-size: 1.2rem;
 `;
 const ListItem = styled.li`
   color: ${(props) => (props["data-active"] ? theme.text.active : theme.text.secondary)};
-  font-size: 13px;
   text-transform: capitalize;
   padding: 20px;
   cursor: pointer;
+  font-size: 1.5rem;
+
+  @media (max-width: 1024px) {
+    font-size: 1.8rem;
+  }
 
   & svg {
     margin-right: 20px;

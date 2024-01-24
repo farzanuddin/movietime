@@ -138,7 +138,7 @@ const SearchInput = styled.input`
   border: none;
   border-radius: 10px;
   outline: none;
-  font-size: 14px;
+  font-size: 1.4rem;
   flex: 1;
   color: ${theme.text.primary};
   background: ${theme.section.active};
