@@ -25,7 +25,6 @@ export const App = () => {
     fetchMovies();
   }, []);
 
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />

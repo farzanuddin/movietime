@@ -13,4 +13,7 @@ export const theme = {
     active: "#81C7C6",
     inactive: "#2A2C3D",
   },
+  misc: {
+    yellow: "#DBAD41",
+  },
 };
