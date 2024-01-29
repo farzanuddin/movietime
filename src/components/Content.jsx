@@ -105,17 +105,19 @@ const DiscoveredSection = ({ setLoading }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchMovies = async (page) => {
+    setLoading(true);
     try {
       const response = await getMoviesWithGenres("/discover/movie", page);
       return response.results;
     } catch (error) {
       console.error(error);
       return [];
+    } finally {
+      setLoading(false);
     }
   };
 
   const loadMoreMovies = async () => {
-    setLoading(true);
     const nextPage = currentPage + 1;
 
     try {
@@ -124,8 +126,6 @@ const DiscoveredSection = ({ setLoading }) => {
       setCurrentPage(nextPage);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -194,8 +194,9 @@ const DiscoveredContainer = styled.div`
   margin: 30px 0;
 `;
 
-const ActiveFilterSection = ({ activeFilter }) => {
+const ActiveFilterSection = ({ activeFilter, setFilterLoading }) => {
   const [activeFilterMovies, setActiveFilterMovies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -211,27 +212,24 @@ const ActiveFilterSection = ({ activeFilter }) => {
   }, [activeFilter]);
 
   return (
-    <>
-      <h2>{FILTER_MAPPING[activeFilter]}:</h2>
-      <ActiveFilterContainer>
-        {activeFilterMovies?.results?.map((movie) => {
-          const { title, backdrop_path, id, release_date } = movie;
-          const backgroundImage = backdrop_path;
-          return (
-            <ActiveFilterItem
-              key={id}
-              loading="lazy"
-              style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
-            >
-              <ActiveFilterItemHover>
-                <p>{title}</p>
-                <span>{dayjs(release_date).format("MMMM YYYY")}</span>
-              </ActiveFilterItemHover>
-            </ActiveFilterItem>
-          );
-        })}
-      </ActiveFilterContainer>
-    </>
+    <ActiveFilterContainer>
+      {activeFilterMovies?.results?.map((movie) => {
+        const { title, backdrop_path, id, release_date } = movie;
+        const backgroundImage = backdrop_path;
+        return (
+          <ActiveFilterItem
+            key={id}
+            loading="lazy"
+            style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
+          >
+            <ActiveFilterItemHover>
+              <p>{title}</p>
+              <span>{dayjs(release_date).format("MMMM YYYY")}</span>
+            </ActiveFilterItemHover>
+          </ActiveFilterItem>
+        );
+      })}
+    </ActiveFilterContainer>
   );
 };
 const ActiveFilterContainer = styled.div`
@@ -304,6 +302,7 @@ const ActiveFilterItemHover = styled.div`
 
 export const Content = ({ activeFilter }) => {
   const [loading, setLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
   return (
     <Container>
       <TitleContainer>
@@ -311,7 +310,11 @@ export const Content = ({ activeFilter }) => {
         {loading && <LoadingOutlined />}
       </TitleContainer>
       <DiscoveredSection loading={loading} setLoading={setLoading} />
-      <ActiveFilterSection activeFilter={activeFilter} />
+      <TitleContainer>
+        <h2>{FILTER_MAPPING[activeFilter]}</h2>
+        {filterLoading && <LoadingOutlined />}
+      </TitleContainer>
+      <ActiveFilterSection activeFilter={activeFilter} setFilterLoading={setFilterLoading} />
     </Container>
   );
 };
