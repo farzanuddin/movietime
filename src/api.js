@@ -53,9 +53,9 @@ const mapGenreIdsToNames = async (genreIds) => {
   }
 };
 
-export const getMoviesWithGenres = async (endpoint) => {
+export const getMoviesWithGenres = async (endpoint, page = 1 ) => {
   try {
-    const response = await getDataFromAPI(endpoint);
+    const response = await getDataFromAPI(endpoint, "", page);
 
     if (!response || !response.results) {
       throw new Error("Invalid response format");
