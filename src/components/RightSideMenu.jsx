@@ -162,6 +162,7 @@ const SearchResultsItem = styled.div`
   background: ${theme.section.active};
   border-radius: 10px;
   margin-bottom: 10px;
+  max-height: 100px;
 `;
 const SearchItemImage = styled.div`
   min-width: 150px;
@@ -175,6 +176,8 @@ const SearchItemInformation = styled.div`
   flex-grow: 1;
   padding: 10px;
   font-size: 1.2rem;
+  overflow: hidden;
+  margin-bottom: 10px;
 `;
 const SearchItemTitle = styled.p`
   display: flex;
@@ -182,10 +185,6 @@ const SearchItemTitle = styled.p`
   font-weight: 800;
 `;
 const SearchItemText = styled.p`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  max-height: 50px;
   color: ${theme.text.secondary};
 `;
 
