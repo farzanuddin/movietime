@@ -102,23 +102,39 @@ const InformationContainer = styled.div`
 
 const DiscoveredSection = () => {
   const [discovered, setDiscovered] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchMovies = async (page) => {
+    try {
+      const response = await getMoviesWithGenres("/discover/movie", page);
+      return response.results;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const loadMoreMovies = async () => {
+    const nextPage = currentPage + 1;
+    const newMovies = await fetchMovies(nextPage);
+
+    setDiscovered((prevMovies) => [...prevMovies, ...newMovies]);
+    setCurrentPage(nextPage);
+  };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await getMoviesWithGenres("/discover/movie");
-        setDiscovered(response);
-      } catch (error) {
-        console.error(error);
-      }
+    const loadInitialMovies = async () => {
+      const initialMovies = await fetchMovies(currentPage);
+      setDiscovered((prevMovies) => [...prevMovies, ...initialMovies]);
     };
 
-    fetchMovies();
-  }, []);
+    loadInitialMovies();
+  }, [currentPage]);
 
   return (
     <DiscoveredContainer>
-      {discovered?.results?.map((movie) => {
+      <button onClick={() => loadMoreMovies()}>Load More</button>
+      {discovered?.map((movie) => {
         const { id, title, vote_average, backdrop_path, genres } = movie;
         return (
           <DiscoverItem

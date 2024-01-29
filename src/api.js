@@ -5,7 +5,7 @@ const cache = {};
 
 export const getDataFromAPI = async (endpoint, query = "", page = 1) => {
   try {
-    const fullEndpoint = `${endpoint}${query && `?query=${query}`}${page > 1 ? `&page=${page}` : ""}`;
+    const fullEndpoint = `${endpoint}${query && `?query=${query}`}${page > 1 ? `?page=${page}` : ""}`;
 
     if (cache[fullEndpoint]) {
       return cache[fullEndpoint];
