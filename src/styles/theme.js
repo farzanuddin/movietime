@@ -14,6 +14,8 @@ export const theme = {
     inactive: "#2A2C3D",
   },
   misc: {
+    white: "#DCDBDE",
+    grey: "#7F8599",
     yellow: "#DBAD41",
     blue: "#48A0F8"
   },

@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { LoadingOutlined, StarFilled } from "@ant-design/icons";
+import {
+  LeftCircleOutlined,
+  LoadingOutlined,
+  RightCircleOutlined,
+  StarFilled,
+} from "@ant-design/icons";
 import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
@@ -100,7 +105,7 @@ const InformationContainer = styled.div`
   justify-content: space-between;
 `;
 
-const DiscoveredSection = ({ setLoading }) => {
+const DiscoveredSection = ({ loading, setLoading }) => {
   const [discovered, setDiscovered] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -162,21 +167,27 @@ const DiscoveredSection = ({ setLoading }) => {
   }, [discovered]);
 
   return (
-    <DiscoveredContainer>
-      {discovered?.map((movie, index) => {
-        const { id, title, vote_average, backdrop_path, genres } = movie;
-        return (
-          <DiscoverItem
-            key={id + index}
-            title={title}
-            average={vote_average}
-            backgroundImage={`${IMAGE_URL_BASE}${backdrop_path}`}
-            genres={genres}
-          />
-        );
-      })}
-      <div id="intersection-trigger" style={{ height: "10px" }} />
-    </DiscoveredContainer>
+    <>
+      <TitleContainer>
+        <h2>Discover Movies</h2>
+        {loading && <LoadingOutlined />}
+      </TitleContainer>
+      <DiscoveredContainer>
+        {discovered?.map((movie, index) => {
+          const { id, title, vote_average, backdrop_path, genres } = movie;
+          return (
+            <DiscoverItem
+              key={id + index}
+              title={title}
+              average={vote_average}
+              backgroundImage={`${IMAGE_URL_BASE}${backdrop_path}`}
+              genres={genres}
+            />
+          );
+        })}
+        <div id="intersection-trigger" style={{ height: "10px" }} />
+      </DiscoveredContainer>
+    </>
   );
 };
 const DiscoveredContainer = styled.div`
@@ -194,14 +205,14 @@ const DiscoveredContainer = styled.div`
   margin: 30px 0;
 `;
 
-const ActiveFilterSection = ({ activeFilter, setFilterLoading }) => {
+const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) => {
   const [activeFilterMovies, setActiveFilterMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (page) => {
     setFilterLoading(true);
     try {
-      const response = await getDataFromAPI(`/movie/${activeFilter}`);
+      const response = await getDataFromAPI(`/movie/${activeFilter}`, "", page);
       return response.results;
     } catch (error) {
       console.error(error);
@@ -211,36 +222,96 @@ const ActiveFilterSection = ({ activeFilter, setFilterLoading }) => {
     }
   };
 
+  const loadMovies = async (page) => {
+    const movies = await fetchMovies(page);
+    setActiveFilterMovies(movies);
+  };
+
+  const handleLeftButtonClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      loadMovies(currentPage - 1);
+    }
+  };
+
+  const handleRightButtonClick = () => {
+    setCurrentPage(currentPage + 1);
+    loadMovies(currentPage + 1);
+  };
+
   useEffect(() => {
+    setCurrentPage(1);
     const loadInitialMovies = async () => {
-      const initialMovies = await fetchMovies();
-      setActiveFilterMovies(initialMovies);
+      loadMovies(currentPage);
     };
 
     loadInitialMovies();
   }, [activeFilter]);
 
   return (
-    <ActiveFilterContainer>
-      {activeFilterMovies?.map((movie, index) => {
-        const { title, backdrop_path, id, release_date } = movie;
-        const backgroundImage = backdrop_path;
-        return (
-          <ActiveFilterItem
-            key={id + index}
-            loading="lazy"
-            style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
-          >
-            <ActiveFilterItemHover>
-              <p>{title}</p>
-              <span>{dayjs(release_date).format("MMMM YYYY")}</span>
-            </ActiveFilterItemHover>
-          </ActiveFilterItem>
-        );
-      })}
-    </ActiveFilterContainer>
+    <>
+      <TitleContainer>
+        <div>
+          <h2>{FILTER_MAPPING[activeFilter]}</h2>
+          {filterLoading && <LoadingOutlined />}
+        </div>
+        <ButtonBar>
+          <DirectionButton disabled={currentPage === 1} onClick={handleLeftButtonClick}>
+            <LeftCircleOutlined />
+          </DirectionButton>
+          <DirectionButton onClick={handleRightButtonClick}>
+            <RightCircleOutlined />
+          </DirectionButton>
+        </ButtonBar>
+      </TitleContainer>
+      <ActiveFilterContainer>
+        {activeFilterMovies?.map((movie, index) => {
+          const { title, backdrop_path, id, release_date } = movie;
+          const backgroundImage = backdrop_path;
+          return (
+            <ActiveFilterItem
+              key={id + index}
+              loading="lazy"
+              style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
+            >
+              <ActiveFilterItemHover>
+                <p>{title}</p>
+                <span>{dayjs(release_date).format("MMMM YYYY")}</span>
+              </ActiveFilterItemHover>
+            </ActiveFilterItem>
+          );
+        })}
+      </ActiveFilterContainer>
+    </>
   );
 };
+const ButtonBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 80px;
+`;
+const DirectionButton = styled.button`
+  background: none;
+  color: ${theme.misc.white};
+
+  &:disabled {
+    color: ${theme.misc.grey};
+    cursor: not-allowed;
+  }
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
+
+  @media (max-width: 1024px) {
+    svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+`;
 const ActiveFilterContainer = styled.div`
   overflow-x: auto;
   display: grid;
@@ -272,6 +343,7 @@ const ActiveFilterItem = styled.div`
   background-repeat: no-repeat;
   cursor: pointer;
   transition: opacity 0.3s ease;
+  background-color: ${theme.section.active};
 
   &:hover {
     .hover-text {
@@ -314,16 +386,12 @@ export const Content = ({ activeFilter }) => {
   const [filterLoading, setFilterLoading] = useState(false);
   return (
     <Container>
-      <TitleContainer>
-        <h2>Discover Movies</h2>
-        {loading && <LoadingOutlined />}
-      </TitleContainer>
       <DiscoveredSection loading={loading} setLoading={setLoading} />
-      <TitleContainer>
-        <h2>{FILTER_MAPPING[activeFilter]}</h2>
-        {filterLoading && <LoadingOutlined />}
-      </TitleContainer>
-      <ActiveFilterSection activeFilter={activeFilter} setFilterLoading={setFilterLoading} />
+      <ActiveFilterSection
+        activeFilter={activeFilter}
+        filterLoading={filterLoading}
+        setFilterLoading={setFilterLoading}
+      />
     </Container>
   );
 };
@@ -334,6 +402,12 @@ const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 
   h2 {
     margin-right: 10px;
