@@ -37,7 +37,7 @@ export const getDataFromAPI = async (endpoint, query = "", page = 1) => {
 
 const mapGenreIdsToNames = async (genreIds) => {
   try {
-    const genreResponse = await getDataFromAPI("/genre/movie/list", "language=en");
+    const genreResponse = await getDataFromAPI("/genre/movie/list");
 
     const genreMap = new Map(genreResponse?.genres?.map((genre) => [genre.id, genre.name]));
 
