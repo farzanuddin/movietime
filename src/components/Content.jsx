@@ -208,11 +208,12 @@ const DiscoveredContainer = styled.div`
 const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) => {
   const [activeFilterMovies, setActiveFilterMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentFilter, setCurrentFilter] = useState(null);
 
-  const fetchMovies = async (page) => {
+  const fetchMovies = async (page, filter) => {
     setFilterLoading(true);
     try {
-      const response = await getDataFromAPI(`/movie/${activeFilter}`, "", page);
+      const response = await getDataFromAPI(`/movie/${filter}`, "", page);
       return response.results;
     } catch (error) {
       console.error(error);
@@ -222,31 +223,31 @@ const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) 
     }
   };
 
-  const loadMovies = async (page) => {
-    const movies = await fetchMovies(page);
+  const loadMovies = async (page, filter) => {
+    const movies = await fetchMovies(page, filter);
     setActiveFilterMovies(movies);
   };
 
   const handleLeftButtonClick = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      loadMovies(currentPage - 1);
+      loadMovies(currentPage - 1, currentFilter);
     }
   };
 
   const handleRightButtonClick = () => {
     setCurrentPage(currentPage + 1);
-    loadMovies(currentPage + 1);
+    loadMovies(currentPage + 1, currentFilter);
   };
 
   useEffect(() => {
-    setCurrentPage(1);
-    const loadInitialMovies = async () => {
-      loadMovies(currentPage);
-    };
+    if (currentFilter !== activeFilter) {
+      setCurrentFilter(activeFilter);
+      setCurrentPage(1);
+      loadMovies(1, activeFilter);
+    }
+  }, [activeFilter, currentFilter]);
 
-    loadInitialMovies();
-  }, [activeFilter]);
 
   return (
     <>
