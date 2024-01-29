@@ -105,7 +105,7 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
       </SearchContainer>
       {!_isEmpty(searchResults) && (
         <SearchResultsContainer>
-          {searchResults?.results?.slice(0, 10).map((movie) => {
+          {searchResults?.results?.map((movie) => {
             const { id, backdrop_path, title, overview } = movie;
             return (
               <SearchResultsItem key={id}>

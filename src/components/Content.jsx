@@ -118,7 +118,7 @@ const DiscoveredSection = () => {
 
   return (
     <DiscoveredContainer>
-      {discovered?.results?.slice(0, 10)?.map((movie) => {
+      {discovered?.results?.map((movie) => {
         const { id, title, vote_average, backdrop_path, genres } = movie;
         return (
           <DiscoverItem
@@ -168,7 +168,7 @@ const ActiveFilterSection = ({ activeFilter }) => {
     <>
       <h2>{FILTER_MAPPING[activeFilter]}:</h2>
       <ActiveFilterContainer>
-        {activeFilterMovies?.results?.slice(0, 10).map((movie) => {
+        {activeFilterMovies?.results?.map((movie) => {
           const { title, backdrop_path, id, release_date } = movie;
           const backgroundImage = backdrop_path;
           return (
