@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
-  LeftCircleOutlined,
-  LoadingOutlined,
-  RightCircleOutlined,
-  StarFilled,
+  LeftCircleOutlined as LeftIcon,
+  LoadingOutlined as LoadingIcon,
+  RightCircleOutlined as RightIcon,
+  StarFilled as StarIcon,
 } from "@ant-design/icons";
 import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
@@ -38,7 +38,7 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
           <Genre>{genres?.map((genre) => genre.name).join(", ")}</Genre>
         </TextContainer>
         <StarContainer>
-          <StarFilled style={{ color: theme.misc.yellow }} />
+          <StarIcon />
           <Average>{average}</Average>
         </StarContainer>
       </InformationContainer>
@@ -88,6 +88,10 @@ const StarContainer = styled.div`
   width: auto;
   position: relative;
   z-index: 2;
+
+  svg {
+    color: ${theme.misc.yellow};
+  }
 `;
 const Average = styled.p`
   color: ${theme.misc.yellow};
@@ -170,7 +174,7 @@ const DiscoveredSection = ({ loading, setLoading }) => {
     <>
       <TitleContainer>
         <h2>Discover Movies</h2>
-        {loading && <LoadingOutlined />}
+        {loading && <LoadingIcon />}
       </TitleContainer>
       <DiscoveredContainer>
         {discovered?.map((movie, index) => {
@@ -248,20 +252,19 @@ const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) 
     }
   }, [activeFilter, currentFilter]);
 
-
   return (
     <>
       <TitleContainer>
         <div>
           <h2>{FILTER_MAPPING[activeFilter]}</h2>
-          {filterLoading && <LoadingOutlined />}
+          {filterLoading && <LoadingIcon />}
         </div>
         <ButtonBar>
           <DirectionButton disabled={currentPage === 1} onClick={handleLeftButtonClick}>
-            <LeftCircleOutlined />
+            <LeftIcon />
           </DirectionButton>
           <DirectionButton onClick={handleRightButtonClick}>
-            <RightCircleOutlined />
+            <RightIcon />
           </DirectionButton>
         </ButtonBar>
       </TitleContainer>
