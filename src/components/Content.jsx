@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   LeftCircleOutlined as LeftIcon,
   LoadingOutlined as LoadingIcon,
@@ -48,6 +48,7 @@ const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
 };
 const DiscoveredItemContainer = styled.div`
   display: flex;
+  background: ${theme.section.active};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -178,6 +179,12 @@ const DiscoveredSection = ({ loading, setLoading }) => {
         {loading && <LoadingIcon />}
       </TitleContainer>
       <DiscoveredContainer>
+        {loading &&
+          Array(2)
+            .fill()
+            .map((item, index) => {
+              return <DiscoverItemSkeleton key={index} />;
+            })}
         {discovered?.map((movie, index) => {
           const { id, title, vote_average, backdrop_path, genres } = movie;
           return (
@@ -195,6 +202,36 @@ const DiscoveredSection = ({ loading, setLoading }) => {
     </>
   );
 };
+const skeletonAnimation = keyframes`
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+`;
+const DiscoverItemSkeleton = styled.div`
+  display: flex;
+  height: 250px;
+  padding: 20px;
+  min-width: 500px;
+  border-radius: 10px;
+  background: ${theme.section.background};
+  background: linear-gradient(
+    90deg,
+    ${theme.section.active} 25%,
+    ${theme.section.background} 50%,
+    ${theme.section.active} 100%
+  );
+  background-size: 200% 100%;
+  animation: ${skeletonAnimation} 2s infinite;
+
+  @media (max-width: 1024px) {
+    height: 200px;
+    min-width: 300px;
+    width: 100%;
+  }
+`;
 const DiscoveredContainer = styled.div`
   overflow-x: auto;
   display: grid;
@@ -270,6 +307,12 @@ const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) 
         </ButtonBar>
       </TitleContainer>
       <ActiveFilterContainer>
+        {filterLoading &&
+          Array(4)
+            .fill()
+            .map((item, index) => {
+              return <ActiveFilterSkeletonItem key={index} />;
+            })}
         {activeFilterMovies?.map((movie, index) => {
           const { title, backdrop_path, id, release_date } = movie;
           const backgroundImage = backdrop_path;
@@ -290,6 +333,26 @@ const ActiveFilterSection = ({ activeFilter, filterLoading, setFilterLoading }) 
     </>
   );
 };
+const ActiveFilterSkeletonItem = styled.div`
+  display: flex;
+  height: 250px;
+  min-width: 200px;
+  border-radius: 10px;
+  background-color: ${theme.section.active};
+  background: linear-gradient(
+    90deg,
+    ${theme.section.active} 25%,
+    ${theme.section.background} 50%,
+    ${theme.section.active} 100%
+  );
+  background-size: 200% 100%;
+  animation: ${skeletonAnimation} 2s infinite;
+
+  @media (max-width: 1024px) {
+    height: 230px;
+    min-width: 250px;
+  }
+`;
 const ButtonBar = styled.div`
   display: flex;
   align-items: center;
