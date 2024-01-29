@@ -10,6 +10,7 @@ import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
 import dayjs from "dayjs";
+import { isEmpty as _isEmpty } from "lodash";
 
 const DiscoverItem = ({ title, average, backgroundImage, genres }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -150,7 +151,7 @@ const DiscoveredSection = ({ loading, setLoading }) => {
   const handleIntersection = async (entries) => {
     const target = entries[0];
 
-    if (target.isIntersecting) {
+    if (!_isEmpty(discovered) && target.isIntersecting) {
       await loadMoreMovies();
     }
   };
