@@ -66,7 +66,7 @@ const mapGenreIdsToNames = async (genreIds) => {
 
 export const getMoviesWithGenres = async (endpoint) => {
   try {
-    const response = await fetchData(endpoint);
+    const response = await getDataFromAPI(endpoint);
 
     if (!response || !response.results) {
       throw new Error("Invalid response format");
@@ -76,7 +76,9 @@ export const getMoviesWithGenres = async (endpoint) => {
     const mappedGenres = await mapGenreIdsToNames(genreIds);
     const moviesWithGenres = response?.results?.map((movie) => ({
       ...movie,
-      genres: movie?.genre_ids?.map((genreId) => mappedGenres.find((genre) => genre.id === genreId)),
+      genres: movie?.genre_ids?.map((genreId) =>
+        mappedGenres.find((genre) => genre.id === genreId)
+      ),
     }));
 
     return { ...response, results: moviesWithGenres };
@@ -88,7 +90,7 @@ export const getMoviesWithGenres = async (endpoint) => {
 
 export const mapActorDetails = async (actorId) => {
   try {
-    const res = await fetchData(`/person/${actorId}`);
+    const res = await getDataFromAPI(`/person/${actorId}`);
     const mappedActorDetails = {
       name: res.name,
       birth: res.place_of_birth,
