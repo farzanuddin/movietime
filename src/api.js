@@ -3,46 +3,35 @@ import { AUTH_KEY, URL_BASE } from "./constants";
 
 const cache = {};
 
-const fetchData = async (endpoint) => {
-  if (typeof endpoint !== "string" || endpoint.trim() === "") {
-    throw new Error("Invalid endpoint");
-  }
-
-  if (cache[endpoint]) {
-    return cache[endpoint];
-  }
-
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${AUTH_KEY}`,
-    },
-  };
-
-  const constructedUrl = URL_BASE + endpoint;
-
+export const getDataFromAPI = async (endpoint, query = "") => {
   try {
+    const fullEndpoint = `${endpoint}${query && `?query=${query}`}`;
+
+    if (cache[fullEndpoint]) {
+      return cache[fullEndpoint];
+    }
+
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${AUTH_KEY}`,
+      },
+    };
+
+    const constructedUrl = URL_BASE + fullEndpoint;
+
     const response = await axios.get(constructedUrl, options);
 
     if (response.status !== 200) {
       throw new Error(`Failed to fetch data. Status: ${response.status}`);
     }
-    cache[endpoint] = response.data;
+
+    cache[fullEndpoint] = response.data;
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}`, error.message);
     throw error;
-  }
-};
-
-export const getDataFromAPI = async (endpoint, query = "") => {
-  try {
-    const response = await fetchData(`${endpoint}${query && `?query=${query}`}`);
-    return response;
-  } catch (error) {
-    console.error(error);
-    return;
   }
 };
 
