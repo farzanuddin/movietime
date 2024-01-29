@@ -9,6 +9,7 @@ import {
   EnvironmentOutlined as EnvironmentIcon,
   SearchOutlined as SearchIcon,
   LoadingOutlined as Loader,
+  CloseCircleOutlined as CloseIcon,
 } from "@ant-design/icons";
 import { FILTERS, IMAGE_URL_BASE, LOGGED_IN_USER, FILTER_MAPPING } from "../constants";
 
@@ -92,6 +93,11 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
     debouncedSearch(newSearchTerm);
   };
 
+  const handleEndSearch = () => {
+    setSearchTerm("");
+    setSearchResults([]);
+  };
+
   return (
     <>
       <SearchContainer>
@@ -101,7 +107,15 @@ const SearchBar = ({ searchResults, setSearchResults }) => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <SearchIconContainer>{loading ? <Loader /> : <SearchIcon />}</SearchIconContainer>
+        <SearchIconContainer>
+          {loading ? (
+            <Loader />
+          ) : searchTerm ? (
+            <CloseIcon onClick={() => handleEndSearch()} />
+          ) : (
+            <SearchIcon />
+          )}
+        </SearchIconContainer>
       </SearchContainer>
       {!_isEmpty(searchResults) && (
         <SearchResultsContainer>
