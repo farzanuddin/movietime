@@ -163,11 +163,11 @@ const DiscoveredSection = ({ setLoading }) => {
 
   return (
     <DiscoveredContainer>
-      {discovered?.map((movie) => {
+      {discovered?.map((movie, index) => {
         const { id, title, vote_average, backdrop_path, genres } = movie;
         return (
           <DiscoverItem
-            key={id}
+            key={id + index}
             title={title}
             average={vote_average}
             backgroundImage={`${IMAGE_URL_BASE}${backdrop_path}`}
@@ -202,26 +202,32 @@ const ActiveFilterSection = ({ activeFilter, setFilterLoading }) => {
     setFilterLoading(true);
     try {
       const response = await getDataFromAPI(`/movie/${activeFilter}`);
-      setActiveFilterMovies(response);
+      return response.results;
     } catch (error) {
       console.error(error);
+      return [];
     } finally {
       setFilterLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMovies();
+    const loadInitialMovies = async () => {
+      const initialMovies = await fetchMovies();
+      setActiveFilterMovies(initialMovies);
+    };
+
+    loadInitialMovies();
   }, [activeFilter]);
 
   return (
     <ActiveFilterContainer>
-      {activeFilterMovies?.results?.map((movie) => {
+      {activeFilterMovies?.map((movie, index) => {
         const { title, backdrop_path, id, release_date } = movie;
         const backgroundImage = backdrop_path;
         return (
           <ActiveFilterItem
-            key={id}
+            key={id + index}
             loading="lazy"
             style={{ backgroundImage: `url(${IMAGE_URL_BASE}${backgroundImage})` }}
           >
