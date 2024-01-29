@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { StarFilled } from "@ant-design/icons";
+import { LoadingOutlined, StarFilled } from "@ant-design/icons";
 import { getDataFromAPI, getMoviesWithGenres } from "../api";
 import { theme } from "../styles/theme";
 import { FILTER_MAPPING, IMAGE_URL_BASE } from "../constants";
@@ -100,7 +100,7 @@ const InformationContainer = styled.div`
   justify-content: space-between;
 `;
 
-const DiscoveredSection = () => {
+const DiscoveredSection = ({ setLoading }) => {
   const [discovered, setDiscovered] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -115,11 +115,18 @@ const DiscoveredSection = () => {
   };
 
   const loadMoreMovies = async () => {
+    setLoading(true);
     const nextPage = currentPage + 1;
-    const newMovies = await fetchMovies(nextPage);
 
-    setDiscovered((prevMovies) => [...prevMovies, ...newMovies]);
-    setCurrentPage(nextPage);
+    try {
+      const newMovies = await fetchMovies(nextPage);
+      setDiscovered((prevMovies) => [...prevMovies, ...newMovies]);
+      setCurrentPage(nextPage);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -131,9 +138,31 @@ const DiscoveredSection = () => {
     loadInitialMovies();
   }, [currentPage]);
 
+  const handleIntersection = async (entries) => {
+    const target = entries[0];
+
+    if (target.isIntersecting) {
+      await loadMoreMovies();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
+    });
+
+    const targetNode = document.getElementById("intersection-trigger");
+    if (targetNode) {
+      observer.observe(targetNode);
+    }
+
+    return () => observer.disconnect();
+  }, [discovered]);
+
   return (
     <DiscoveredContainer>
-      <button onClick={() => loadMoreMovies()}>Load More</button>
       {discovered?.map((movie) => {
         const { id, title, vote_average, backdrop_path, genres } = movie;
         return (
@@ -146,6 +175,7 @@ const DiscoveredSection = () => {
           />
         );
       })}
+      <div id="intersection-trigger" style={{ height: "10px" }} />
     </DiscoveredContainer>
   );
 };
@@ -273,14 +303,27 @@ const ActiveFilterItemHover = styled.div`
 `;
 
 export const Content = ({ activeFilter }) => {
+  const [loading, setLoading] = useState(false);
   return (
     <Container>
-      <h2>Discover Movies:</h2>
-      <DiscoveredSection />
+      <TitleContainer>
+        <h2>Discover Movies</h2>
+        {loading && <LoadingOutlined />}
+      </TitleContainer>
+      <DiscoveredSection loading={loading} setLoading={setLoading} />
       <ActiveFilterSection activeFilter={activeFilter} />
     </Container>
   );
 };
 const Container = styled.div`
   padding: 20px;
+`;
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  h2 {
+    margin-right: 10px;
+  }
 `;
