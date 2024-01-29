@@ -60,6 +60,7 @@ const DiscoveredItemContainer = styled.div`
     top: 0;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
     z-index: 1;
+    border-radius: 10px;
   }
 
   @media (max-width: 1024px) {
