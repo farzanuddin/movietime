@@ -198,16 +198,19 @@ const ActiveFilterSection = ({ activeFilter, setFilterLoading }) => {
   const [activeFilterMovies, setActiveFilterMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await getDataFromAPI(`/movie/${activeFilter}`);
-        setActiveFilterMovies(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const fetchMovies = async () => {
+    setFilterLoading(true);
+    try {
+      const response = await getDataFromAPI(`/movie/${activeFilter}`);
+      setActiveFilterMovies(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setFilterLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchMovies();
   }, [activeFilter]);
 
