@@ -153,8 +153,8 @@ const SearchIconContainer = styled.div`
 const SearchResultsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 75vh;
   padding: 0 20px;
-  max-height: 500px;
   overflow-y: auto;
 `;
 const SearchResultsItem = styled.div`
